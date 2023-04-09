@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc
+		http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+    <mybatis-spring:scan base-package="com.nedam.soochanProject.mapper" />
+
+    <!-- 데이터베이스 연결 -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" lazy-init="false">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
+        <property name="username" value="c##root"/>
+        <property name="password" value="1111"/>
+    </bean>
+
+
+<!--    &lt;!&ndash; DataSource dataSource = new DataSource(hikariConfig) &ndash;&gt;-->
+<!--    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">-->
+<!--        <constructor-arg ref="hikariConfig"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--        <property name="mapperLocations" value="classpath:/META-INF/com/koreait/mapper/**/*.xml"/>-->
+<!--        &lt;!&ndash; <property name="configLocation" value="classpath:/META-INF/com/koreait/config/MapperConfig.xml"/> &ndash;&gt;-->
+<!--    </bean>-->
+
+<!--&lt;!&ndash;    sqlsession&ndash;&gt;-->
+<!--    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">-->
+<!--        <constructor-arg ref="sqlSessionFactory" />-->
+<!--    </bean>-->
+    <!-- Mybatis 설정 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:/mybatis-config.xml" />
+    </bean>
 
 </beans>
