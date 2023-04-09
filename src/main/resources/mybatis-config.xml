@@ -2,10 +2,13 @@
 <!DOCTYPE configuration PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
     <!--mapper에서 매칭할 parmeter Type 별칭 설정-->
-<!--    <typeAliases>-->
-<!--        <typeAlias type="com.nedam.soochanProject.domain.StaffVo" alias="staff"/>-->
-<!--    </typeAliases>-->
+    <!--    <typeAliases>-->
+    <!--        <typeAlias type="com.nedam.soochanProject.domain.StaffVo" alias="staff"/>-->
+    <!--    </typeAliases>-->
 
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
 
     <environments default="development">
 
@@ -17,6 +20,7 @@
                 <property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"/>
                 <property name="username" value="c##root"/>
                 <property name="password" value="1111"/>
+
             </dataSource>
         </environment>
     </environments>
