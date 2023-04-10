@@ -4,7 +4,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nedam.soochanProject.mapper.StaffMapper">
     <select id="getStaffList" resultType="com.nedam.soochanProject.domain.StaffVo">
-       SELECT *
-       FROM TABLE_STAFF
+        SELECT *
+        FROM TABLE_STAFF
     </select>
+    <!--사원등록-->
+    <insert id="register" parameterType="com.nedam.soochanProject.domain.StaffVo">
+        INSERT INTO STAFF(staff_no, staff_name, jumin_no, school_code, department_code, graduate_day)
+        VALUES (STAFF_SEQUENCE.NEXTVAL, #{staffName}, #{juminNo},
+                (select school_code from code_school where school_name = #{schoolCode}),
+                (select department_code from code_department where department_name = #{departmentCode}),
+                #{graduateDay})
+    </insert>
+
+    <!--상세조회-->
+    <select id="getDetail" parameterType="com.nedam.soochanProject.dto.DetailRequestDto"
+            resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT s.*
+        FROM staff s
+                 JOIN code_department cd ON s.department_code = cd.department_code
+        WHERE s.staff_name = #{staffName}
+          AND cd.department_name = #{departmentCode}
+
+    </select>
+    <update id="update" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">
+        UPDATE STAFF
+            SET
+                staff_name = #{staffName},
+            jumin_no=#{juminNo},
+            department_code = (
+            SELECT department_code
+            FROM code_department
+            WHERE department_name = #{departmentCode}
+            ),
+            school_code = (
+                SELECT school_code
+                FROM code_school
+                WHERE school_name = #{schoolCode}
+            ),
+            graduate_day = #{graduateDay}
+        WHERE staff_no = #{staffNo}
+
+    </update>
+
+    <select id="selectUserByCondition" parameterType="map" resultType="user">
+        SELECT * FROM user WHERE 1=1
+        <if test="name != null">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="department != null">
+            AND department = #{department}
+        </if>
+    </select>
+
+
+
 </mapper>

@@ -5,15 +5,19 @@
          version="4.0">
 
 
-
+<!--<context-param>은 Java Servlet 컨테이너에서 사용되는 웹 애플리케이션의 환경 설정 정보를 지정하는 데 사용되는 XML 요소-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>WEB-INF/spring/applicationContext.xml</param-value>
     </context-param>
+
+<!--<listener>는 Java Servlet 컨테이너에서 이벤트를 처리하기 위한 리스너를 구현하는 데 사용되는 XML 요소-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+<!--<servlet> 요소는 Servlet 인스턴스를 생성하고 초기화하는 데 사용-->
+<!--디스펫쳐서블릿을 등록, 디스펫쳐서블릿은 요청을 컨트롤함-->
     <servlet>
         <servlet-name>appServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
