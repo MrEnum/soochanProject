@@ -11,51 +11,144 @@
     <insert id="register" parameterType="com.nedam.soochanProject.domain.StaffVo">
         INSERT INTO STAFF(staff_no, staff_name, jumin_no, school_code, department_code, graduate_day)
         VALUES (STAFF_SEQUENCE.NEXTVAL, #{staffName}, #{juminNo},
-                (select school_code from code_school where school_name = #{schoolCode}),
-                (select department_code from code_department where department_name = #{departmentCode}),
+                #{schoolCode},
+                #{departmentCode},
                 #{graduateDay})
+    </insert>
+    <!--사원 스킬 등록 -->
+    <insert id="registerStaffSkill" parameterType="com.nedam.soochanProject.dto.InserStaffSkillDto">
+        <bind name="staffName1" value="staffName"/>
+        INSERT INTO staff_skill(staff_no, skill_code)
+        <foreach collection="skillCode" item="skill" separator="UNION ALL">
+            <!--        <if test="skill != ''">-->
+            SELECT
+            (SELECT staff_no FROM staff WHERE staff_name = #{staffName1}),
+            (SELECT skill_code FROM code_skill WHERE skill_name = #{skill})
+            FROM DUAL
+        </foreach>
     </insert>
 
     <!--상세조회-->
-    <select id="getDetail" parameterType="com.nedam.soochanProject.dto.DetailRequestDto"
+    <select id="getDetail" parameterType="int"
             resultType="com.nedam.soochanProject.domain.StaffVo">
-        SELECT s.*
-        FROM staff s
-                 JOIN code_department cd ON s.department_code = cd.department_code
-        WHERE s.staff_name = #{staffName}
-          AND cd.department_name = #{departmentCode}
-
-    </select>
-    <update id="update" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">
-        UPDATE STAFF
-            SET
-                staff_name = #{staffName},
-            jumin_no=#{juminNo},
-            department_code = (
-            SELECT department_code
-            FROM code_department
-            WHERE department_name = #{departmentCode}
-            ),
-            school_code = (
-                SELECT school_code
-                FROM code_school
-                WHERE school_name = #{schoolCode}
-            ),
-            graduate_day = #{graduateDay}
+        SELECT *
+        FROM staff
         WHERE staff_no = #{staffNo}
 
-    </update>
 
-    <select id="selectUserByCondition" parameterType="map" resultType="user">
-        SELECT * FROM user WHERE 1=1
-        <if test="name != null">
-            AND name LIKE CONCAT('%', #{name}, '%')
-        </if>
-        <if test="department != null">
-            AND department = #{department}
-        </if>
+    </select>
+    <!--    <update id="update" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">-->
+    <!--        UPDATE STAFF-->
+    <!--        SET staff_name      = #{staffName},-->
+    <!--            jumin_no=#{juminNo},-->
+    <!--            department_code = (-->
+    <!--                SELECT department_code-->
+    <!--                FROM code_department-->
+    <!--                WHERE department_name = #{departmentCode}-->
+    <!--            ),-->
+    <!--            school_code     = (-->
+    <!--                SELECT school_code-->
+    <!--                FROM code_school-->
+    <!--                WHERE school_name = #{schoolCode}-->
+    <!--            ),-->
+    <!--            graduate_day    = #{graduateDay}-->
+    <!--        WHERE staff_no = #{staffNo}-->
+
+    <!--    </update>-->
+
+    <!--검색쿼리-->
+    <select id="getSearchList" parameterType="int"
+            resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT staff_No FROM staff
+        <where>
+            <if test="staffName != null">
+                AND staff_name LIKE '%' || #{staffName}|| '%'
+            </if>
+            <if test="departmentCode != null">
+                AND department_code = #{deparmentCode}
+            </if>
+            <if test="schoolCode != null">
+                AND school_code = #{schoolCode}
+            </if>
+            <if test="graduateDay != null">-->
+                AND graduate_day = #{graduateDay}
+            </if>
+        </where>
+
+        <!--                <if test="skillCode != null and skillCode.size() > 0">-->
+        <!--                    AND staff_no IN (-->
+        <!--                    SELECT staff_no FROM staff_skill-->
+        <!--                    WHERE skill_code IN-->
+        <!--                    <foreach collection="skillCode" item="code" open="(" close=")" separator=",">-->
+        <!--                        #{code}-->
+        <!--                    </foreach>-->
+        <!--                    GROUP BY staff_no-->
+        <!--                    HAVING COUNT(DISTINCT skill_code) = #{skillCode.size()}-->
+        <!--                    )-->
+        <!--                </if>-->
+
     </select>
 
+    <select id="getSearchStaffList" parameterType="java.util.List" resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT * FROM Staff
+            WHERE
+        staff_no IN (
+        SELECT staff_no FROM staff_skill
+        WHERE skill_code IN
+        <foreach collection="skillCode" item="code" open="(" close=")" separator=",">
+            #{code}
+        </foreach>
+        GROUP BY staff_no
+        HAVING COUNT(DISTINCT skill_code) = #{skillCode.size()}
+        )
+    </select>
+    <!--    SELECT *-->
+    <!--    FROM users u-->
+    <!--    INNER JOIN post p ON u.id = p.user_id-->
+    <!--    WHERE p.id IN (1, 2, 3);-->
 
+    <select id="getSkillList" resultType="java.util.List">
+        SELECT skill_code, skill_name
+        FROM code_skill
+    </select>
+
+    <insert id="registerSkill" parameterType="com.nedam.soochanProject.dto.ForSkillListDto">
+        <foreach collection="skillList" item="skillName">
+            INSERT INTO code_skill(skill_code, skill_name)
+            VALUES(code_skill_seq.nextval, #{skillName})
+        </foreach>
+    </insert>
+    <!--삭제-->
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM STAFF
+        WHERE staff_no = #{param1}
+    </delete>
+
+    <select id="getStaffSkillList" parameterType="int" resultType="String">
+        SELECT skill_code
+        FROM staff_skill
+        WHERE staff_no = #{param1}
+    </select>
+    <!--staffSkill삭제-->
+    <delete id="deleteStaffSkills" parameterType="int">
+        DELETE
+        FROM staff_skill
+        WHERE staff_no = #{staffNo}
+
+    </delete>
+
+    <update id="updateStaff" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">
+        UPDATE staff
+        SET jumin_no        = #{juminNo},
+            school_code     = #{schoolCode},
+            department_code = #{departmentCode},
+            graduate_day    = #{graduateDay}
+        WHERE staff_no = #{staffNo}
+    </update>
+    <select id="getAllStaff" resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT *
+        from STAFF
+    </select>
 
 </mapper>

@@ -15,6 +15,8 @@
         <property name="suffix" value=".jsp"/>
         <property name="order" value="1"/>
     </bean>
+
+
 <!--@Service나 @Repository같은 어노테이션을 읽어 자동으로 빈등록을 한다.-->
     <context:component-scan base-package="com.nedam.soochanProject"/>
 </beans>

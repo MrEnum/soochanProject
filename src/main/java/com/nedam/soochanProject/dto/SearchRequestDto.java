@@ -1,10 +1,17 @@
 package com.nedam.soochanProject.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
 public class SearchRequestDto {
-    private int staffNo;
-    private String departmentCode;
-    private String schoolCode;
-    private String skillCode;
-    private String graduateDay;	//수정필요
+    private String staffName;       //like
+    private String departmentCode;  //where
+    private String schoolCode;      //where
+    private List<String> skillCode; //like in
+    private String graduateDay;	//where
 
 }

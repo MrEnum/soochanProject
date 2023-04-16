@@ -1,19 +1,17 @@
 package com.nedam.soochanProject.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CodeSkill {
-    private int staffSkillCode;
-    private String staffNo;
-    private String skillCode;
+    private int skillCode;
+    private String skillName;
 
-    public CodeSkill(String staffNo, String skillCode){
-        this.staffNo = staffNo;
-        this.skillCode = skillCode;
+    CodeSkill(String skillName){
+        this.skillName = skillName;
     }
 }

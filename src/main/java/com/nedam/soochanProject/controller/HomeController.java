@@ -1,39 +1,102 @@
 package com.nedam.soochanProject.controller;
 
-import com.nedam.soochanProject.domain.StaffVo;
+import com.nedam.soochanProject.dto.GetDetailResponseDto;
+import com.nedam.soochanProject.dto.StaffRequestDto;
 import com.nedam.soochanProject.service.StaffService;
+import com.nedam.soochanProject.serviceImpl.StaffServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.text.ParseException;
+import java.time.Month;
+import java.time.YearMonth;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
     private final StaffService staffService;
+    private final StaffServiceImpl staffServiceImpl;
 
     @GetMapping("/")
     public String home(Model model) {
-
-        //전체조회
-//        List<StaffVo> staffList = staffService.getStaffList();
-//        System.out.println("home::::::::: wowwow~~" + staffList.get(0).getStaffName());
-        //상세조회
-//        System.out.println(staffService.getDetail("문어","ICT사업부").getStaffName());
-        //등록
-//        staffService.register("문어", "45321", "고졸", "ICT사업부", "s");
-        //수정
-        staffService.update(1,"문수찬", "일이삼사", "고졸", "ICT사업부", "s");
-        //삭제
-//        model.addAttribute("viewAll", staffService.getStaffList());
-        return "home/index";
+        System.out.println("페이지 들어옴");
+        //검색 기능 테스트
+        System.out.println("검색 결과 : " + staffService.searchList("콩",null,null,null,null).toString());
+        return "home/staff_search_form";
     }
 
-    @PostMapping("/register")
-    public void register() {
+
+    @GetMapping("/register")
+    public String inputPage(Model model) {
+
+        return "home/staff_input_form";
+    }
+
+    //수정 return :
+    @PostMapping("/update")
+    public String update(StaffRequestDto staffRequestDto) throws ParseException {
+        System.out.println("타집니다. 컨트롤러 ");
+//        staffRequestDto.setStaffNo(staffNo);
+        staffService.update(staffRequestDto);
+
+        return "home/staff_search_form";
+    }
+
+    //상세조회
+    @GetMapping("/getupdate")
+    public String getDetail(Model model, int staffNo) {
+        GetDetailResponseDto dto = staffService.getDetail(staffNo);
+        System.out.println(dto.getGraduateDay());
+        //날짜 파싱
+        String[] splitStr = dto.getGraduateDay().split("-");
+        int year = Integer.parseInt(splitStr[0]);
+        int month = Integer.parseInt(splitStr[1]);
+        System.out.println(year + " " +month);
+        Date date = new Date(year - 1900, month-1, 1);
+
+        //Date타입에서 자바스크립트단에 맞게 바꿔서 문자열로 보내주기
+        System.out.println(staffService.getDetail(staffNo));
+        model.addAttribute("staff", dto);
+        model.addAttribute("skillList", dto.getSkillCode());
+        model.addAttribute("yearMonth", date);
+        model.addAttribute("staffNo", staffNo);
+//        model.addAttribute("month", yearMonth.getMonth());
+        return "home/staff_updel_form";
+    }
+
+    //등록
+    @PostMapping(value = "/register/do")
+    @ResponseBody
+    public Map<String, Boolean> register(StaffRequestDto staffRequestDto) throws Exception {
+        System.out.println("staffRequestDto : " + staffRequestDto);
+        Map<String, Boolean> map = new HashMap<String, Boolean>();
+        //문자열로 바꿔서 Date타입으로 변환
+        staffService.register(staffRequestDto);
+        map.put("check", true);
+        return map;
+    }
+
+
+    @GetMapping("/search")
+    public String search() {
+        List<String> list = new ArrayList<>();
+        list.add("JAVA");
+        list.add("JS");
+
+        staffService.searchList("문수찬", "ICT사업부", "고졸", list, null);
+        return "home/success";
+    }
+
+    @DeleteMapping("/delete/{staffNo}")
+    public String delete(@PathVariable int staffNo) {
+        System.out.println("삭제 컨트롤러 staffNo : " + staffNo);
+        staffService.delete(staffNo);
+        return "home/staff_search_form";
+
     }
 }
