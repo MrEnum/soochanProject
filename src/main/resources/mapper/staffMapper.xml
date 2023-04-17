@@ -5,7 +5,7 @@
 <mapper namespace="com.nedam.soochanProject.mapper.StaffMapper">
     <select id="getStaffList" resultType="com.nedam.soochanProject.domain.StaffVo">
         SELECT *
-        FROM TABLE_STAFF
+        FROM STAFF
     </select>
     <!--사원등록-->
     <insert id="register" parameterType="com.nedam.soochanProject.domain.StaffVo">
@@ -37,28 +37,10 @@
 
 
     </select>
-    <!--    <update id="update" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">-->
-    <!--        UPDATE STAFF-->
-    <!--        SET staff_name      = #{staffName},-->
-    <!--            jumin_no=#{juminNo},-->
-    <!--            department_code = (-->
-    <!--                SELECT department_code-->
-    <!--                FROM code_department-->
-    <!--                WHERE department_name = #{departmentCode}-->
-    <!--            ),-->
-    <!--            school_code     = (-->
-    <!--                SELECT school_code-->
-    <!--                FROM code_school-->
-    <!--                WHERE school_name = #{schoolCode}-->
-    <!--            ),-->
-    <!--            graduate_day    = #{graduateDay}-->
-    <!--        WHERE staff_no = #{staffNo}-->
-
-    <!--    </update>-->
 
     <!--검색쿼리-->
-    <select id="getSearchList" parameterType="int"
-            resultType="com.nedam.soochanProject.domain.StaffVo">
+    <select id="getSearchIntegerList" parameterType="int"
+            resultType="int">
         SELECT staff_No FROM staff
         <where>
             <if test="staffName != null">
@@ -70,37 +52,75 @@
             <if test="schoolCode != null">
                 AND school_code = #{schoolCode}
             </if>
-            <if test="graduateDay != null">-->
-                AND graduate_day = #{graduateDay}
+
+            <if test="startGraduateDay != null or endGraduateDay != null ">
+                AND graduate_day
+                <if test="endGraduateDay == null and startGraduateDay != null">
+                    between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
+                    AND to_date('9999-12-31', 'YYYY-MM-DD')
+                </if>
+                <if test="endGraduateDay != null and startGraduateDay ==null">
+                    between to_date('0001-01-01', 'YYYY-MM-DD')
+                    AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
+                </if>
+                <if test="endGraduateDay != null and startGraduateDay !=null">
+                    between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
+                    AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
+                </if>
             </if>
         </where>
-
-        <!--                <if test="skillCode != null and skillCode.size() > 0">-->
-        <!--                    AND staff_no IN (-->
-        <!--                    SELECT staff_no FROM staff_skill-->
-        <!--                    WHERE skill_code IN-->
-        <!--                    <foreach collection="skillCode" item="code" open="(" close=")" separator=",">-->
-        <!--                        #{code}-->
-        <!--                    </foreach>-->
-        <!--                    GROUP BY staff_no-->
-        <!--                    HAVING COUNT(DISTINCT skill_code) = #{skillCode.size()}-->
-        <!--                    )-->
-        <!--                </if>-->
-
     </select>
 
-    <select id="getSearchStaffList" parameterType="java.util.List" resultType="com.nedam.soochanProject.domain.StaffVo">
-        SELECT * FROM Staff
-            WHERE
-        staff_no IN (
-        SELECT staff_no FROM staff_skill
-        WHERE skill_code IN
-        <foreach collection="skillCode" item="code" open="(" close=")" separator=",">
-            #{code}
+    <select id="getSearchIntegerStaffList" parameterType="int"
+            resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT * FROM staff
+        <where>
+            <if test="staffName != null">
+                AND staff_name LIKE '%' || #{staffName}|| '%'
+            </if>
+            <if test="departmentCode != null">
+                AND department_code = #{deparmentCode}
+            </if>
+            <if test="schoolCode != null">
+                AND school_code IN
+                <foreach item="item" index="index" collection="schoolCode" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startGraduateDay != null or endGraduateDay != null ">
+                AND graduate_day
+                <if test="endGraduateDay == null and startGraduateDay != null">
+                    between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
+                    AND to_date('9999-12-31', 'YYYY-MM-DD')
+                </if>
+                <if test="endGraduateDay != null and startGraduateDay ==null">
+                    between to_date('0001-01-01', 'YYYY-MM-DD')
+                    AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
+                </if>
+                <if test="endGraduateDay != null and startGraduateDay !=null">
+                    between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
+                    AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <select id="getSearchStaffList" parameterType="com.nedam.soochanProject.dto.SearchStaffSkillDto"
+            resultType="com.nedam.soochanProject.domain.StaffVo">
+        <!--        <select id="findStaffByStaffNoAndSkillCodeList" resultMap="staffResultMap">-->
+        SELECT s.*
+        FROM staff s
+        JOIN staff_skill ss ON s.staff_no = ss.staff_no
+        WHERE s.staff_no IN
+        <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
+            #{item}
         </foreach>
-        GROUP BY staff_no
-        HAVING COUNT(DISTINCT skill_code) = #{skillCode.size()}
-        )
+        AND ss.skill_code IN
+        <foreach item="item" index="index" collection="skillCodeList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
+        HAVING COUNT(DISTINCT ss.skill_code) = #{skillCount}
     </select>
     <!--    SELECT *-->
     <!--    FROM users u-->
@@ -118,6 +138,7 @@
             VALUES(code_skill_seq.nextval, #{skillName})
         </foreach>
     </insert>
+
     <!--삭제-->
     <delete id="delete" parameterType="int">
         DELETE

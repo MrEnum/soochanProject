@@ -8,9 +8,17 @@ import java.util.List;
 import java.util.spi.LocaleServiceProvider;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class SearchStaffSkillDto {
-    private List<Integer> staffNoLsit;
-    private List<String> staffSkillList;
+    private List<Integer> staffNoList;
+    private List<Integer> skillCodeList;
+    private int skillCount;
+
+
+    public SearchStaffSkillDto (List<Integer> staffNoList, List<Integer> skillCodeList){
+        this.staffNoList = staffNoList;
+        this.skillCodeList= skillCodeList;
+        this.skillCount = skillCodeList.size();
+
+    }
 }

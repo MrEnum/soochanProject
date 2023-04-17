@@ -1,7 +1,10 @@
 package com.nedam.soochanProject.controller;
 
+import com.nedam.soochanProject.domain.StaffVo;
 import com.nedam.soochanProject.dto.GetDetailResponseDto;
+import com.nedam.soochanProject.dto.SearchRequestDto;
 import com.nedam.soochanProject.dto.StaffRequestDto;
+import com.nedam.soochanProject.mapper.StaffMapper;
 import com.nedam.soochanProject.service.StaffService;
 import com.nedam.soochanProject.serviceImpl.StaffServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +24,13 @@ import java.util.*;
 public class HomeController {
     private final StaffService staffService;
     private final StaffServiceImpl staffServiceImpl;
+    private final StaffMapper staffMapper;
 
     @GetMapping("/")
     public String home(Model model) {
         System.out.println("페이지 들어옴");
         //검색 기능 테스트
-        System.out.println("검색 결과 : " + staffService.searchList("콩",null,null,null,null).toString());
+//        System.out.println("검색 결과 : " + staffService.searchList("문", null, null, Collections.singletonList("JAVA"), "1991-01-01", null).toString());
         return "home/staff_search_form";
     }
 
@@ -56,8 +60,8 @@ public class HomeController {
         String[] splitStr = dto.getGraduateDay().split("-");
         int year = Integer.parseInt(splitStr[0]);
         int month = Integer.parseInt(splitStr[1]);
-        System.out.println(year + " " +month);
-        Date date = new Date(year - 1900, month-1, 1);
+        System.out.println(year + " " + month);
+        Date date = new Date(year - 1900, month - 1, 1);
 
         //Date타입에서 자바스크립트단에 맞게 바꿔서 문자열로 보내주기
         System.out.println(staffService.getDetail(staffNo));
@@ -82,13 +86,21 @@ public class HomeController {
     }
 
 
-    @GetMapping("/search")
-    public String search() {
-        List<String> list = new ArrayList<>();
-        list.add("JAVA");
-        list.add("JS");
+    @PostMapping("/search")
+    @ResponseBody
+    public String search(Model model, SearchRequestDto searchRequestDto) {
+        System.out.println("search컨트롤 들어오긴하네!" + searchRequestDto.toString());
+        if (searchRequestDto == null) {
+            model.addAttribute("staff", staffMapper.getAllStaff());
+        } else {
+            //for문보다 더 빠름. 불변리스트 어쩌고
+            List<String> skillList = List.of(searchRequestDto.getSkills().split(","));
+            staffService.searchList("문", null, null, Collections.singletonList("JAVA"), "1991-01-01", "2022-01-01");
+        }
+//searchRequestDto.getStaffName(),searchRequestDto.getDepartmentCode(),searchRequestDto.getSchoolCode(), skillList, searchRequestDto.getGraduateDay()
 
-        staffService.searchList("문수찬", "ICT사업부", "고졸", list, null);
+
+//        model.addAttribute("Staff", list);
         return "home/success";
     }
 

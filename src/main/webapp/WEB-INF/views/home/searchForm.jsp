@@ -1,37 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+         pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8"/>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <!-- bootstrap js: jquery load 이후에 작성할것.-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <!-- bootstrap css -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <!-- 사용자작성 css -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
 <!-- sock.js 추가 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
-        integrity="sha512-ayb5R/nKQ3fgNrQdYynCti/n+GD0ybAhd3ACExcYvOR2J1o3HebiAe/P0oZDx5qwB+xkxuKG6Nc0AFTsPT/JDQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js" integrity="sha512-ayb5R/nKQ3fgNrQdYynCti/n+GD0ybAhd3ACExcYvOR2J1o3HebiAe/P0oZDx5qwB+xkxuKG6Nc0AFTsPT/JDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- stomp.js 추가 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-        integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- IE 지원용 : babel-standalone bael-polyfill -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"
-        integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"
-        integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <style>
     th, td {
@@ -51,8 +38,7 @@
             <td class="align-middle">이름</td>
             <td>
                 <div class="align-self-center">
-                    <input id="staffName" class="form-control" type="search" name="staffName" value=""
-                           aria-label="Search">
+                    <input id="staffName" class="form-control" type="search" name="staffName" value="" aria-label="Search">
                 </div>
             </td>
             <%--			<td class="align-middle">성별</td>--%>
@@ -94,22 +80,19 @@
             <td>
                 <div class="row school-check">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="고졸" id="flexCheckDefault"
-                               name="schoolCode">
+                        <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault" name="schoolCode">
                         <label class="form-check-label" for="flexCheckDefault">
                             고졸
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="전문대졸" id="flexCheckChecked"
-                               name="schoolCode">
+                        <input class="form-check-input" type="checkbox" value="2" id="flexCheckChecked" name="schoolCode">
                         <label class="form-check-label" for="flexCheckChecked">
                             전문대졸
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="일반대졸" id="flexCheckChecked"
-                               name="schoolCode">
+                        <input class="form-check-input" type="checkbox" value="3" id="flexCheckChecked" name="schoolCode">
                         <label class="form-check-label" for="flexCheckChecked">
                             일반대졸
                         </label>
@@ -120,31 +103,31 @@
             <td colspan="3">
                 <div class="row">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="JAVA" name="skillCode" id="skill_1">
+                        <input class="form-check-input" type="checkbox" value="1" name="skillCode" id="skill_1">
                         <label class="form-check-label" for="skill_1">
                             Java
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="JSP" name="skillCode" id="skill_2">
+                        <input class="form-check-input" type="checkbox" value="2" name="skillCode" id="skill_2">
                         <label class="form-check-label" for="skill_2">
                             JSP
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="ASP" name="skillCode" id="skill_3">
+                        <input class="form-check-input" type="checkbox" value="3" name="skillCode" id="skill_3">
                         <label class="form-check-label" for="skill_3">
                             ASP
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="PHP" name="skillCode" id="skill_4">
+                        <input class="form-check-input" type="checkbox" value="4" name="skillCode" id="skill_4">
                         <label class="form-check-label" for="skill_4">
                             PHP
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="DELPHI" name="skillCode" id="skill_5">
+                        <input class="form-check-input" type="checkbox" value="5" name="skillCode" id="skill_5">
                         <label class="form-check-label" for="skill_5">
                             Delphi
                         </label>
@@ -157,9 +140,8 @@
             <td colspan="5 align-middle">
                 <select name="startGraduateYear">
                     <option value=""></option>
-                    <%for (int i = 1981; i <= 2000; i++) { %>
-                    <option value="<%=i%>"><%=i%>
-                    </option>
+                    <%for(int i=1981; i<=2000; i++){ %>
+                    <option value="<%=i%>"><%=i%></option>
                     <%} %>
                 </select>
                 년
@@ -176,9 +158,8 @@
 
                 <select name="endGraduateYear">
                     <option value=""></option>
-                    <%for (int i = 1981; i <= 2000; i++) { %>
-                    <option value="<%=i%>"><%=i%>
-                    </option>
+                    <%for(int i=1981; i<=2000; i++){ %>
+                    <option value="<%=i%>"><%=i%></option>
                     <%} %>
                 </select>
                 년
@@ -197,8 +178,7 @@
             <td colspan="5">
                 <div class="row">
                     <div class="align-self-center">
-                        <input id="addInfoData" class="form-control" type="search" name="addInfoData" value=""
-                               aria-label="Search" style="width:260px;">
+                        <input id="addInfoData" class="form-control" type="search" name="addInfoData" value="" aria-label="Search" style="width:260px;">
                     </div>
                     <div class="row">
                         <div class="gender-check" style="margin-left: 30px;">
@@ -224,26 +204,25 @@
         </tbody>
     </table>
 
-    <br/>
+    <br />
     <div class="row">
         <div class="col-sm-6 float-right">
             <input type="submit" class="btn btn-secondary float-right" id="staffSearch" value="검색">
         </div>
         <div class="col-sm-6 float-right">
             <button type="button" class="btn btn-secondary float-right" id="staffInput">등록</button>
-            <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="staffReset">초기화
-            </button>
-            <%--			<button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="searchAll">전부검색</button>--%>
+            <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="staffReset">초기화</button>
+            <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="searchAll">전부검색</button>
 
-            <input type="hidden" name="tagInfo" id="tagInfo"/>
+            <input type="hidden" name="tagInfo" id="tagInfo" />
             <input type="hidden" name="tagStatus" id="tagStatus" value="ASC"/>
         </div>
     </div>
 </form>
 
-<br/>
-<br/>
-<br/>
+<br />
+<br />
+<br />
 
 <div class="float-right" id="totalCountContainer">
     <p>검색건수 → ${totalContent}건</p>
@@ -264,7 +243,7 @@
         </thead>
         <!-- 반복접근할 요소 : items="${list} -->
         <!-- 꺼내면 cmmunityEntity니까 communityEntity라는 이름으로 사용 -->
-        <tbody id="tbody">
+        <tbody id = "tbody">
 
 
         </tbody>
@@ -275,14 +254,14 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $(".dropdown-toggle").dropdown();
     });
 
     // 상세검색 토글
-    $('input[type="checkbox"][name="orAnd"]').click(function () {
+    $('input[type="checkbox"][name="orAnd"]').click(function(){
         // 만약에 체크박스가 클릭되어있으면,
-        if ($(this).prop('checked')) {
+        if($(this).prop('checked')){
             // 체크박스 전체를 checked 해제 후,
             $('input[type="checkbox"][name="orAnd"]').prop('checked', false);
             // click한 요소만 true로 지정
@@ -301,9 +280,25 @@
     // 	}
     // });
 
+    // 전부검색
+    $(document).on('click', '#searchAll', function(e){
+        e.preventDefault();
+        location.href = `${pageContent.request.contextPath}/erp/staff/selectAllStaff.do`
+    });
+
+    // 등록 버튼
+    $("#staffInput").on("click", function(e){
+        e.preventDefault();
+        console.log("등록버튼 작동하나요?");
+
+        let popUrl = "${pageContext.request.contextPath}/staff/staff_input_form.do";
+        let popOption = "width = 1500px, height=500px, top=100px, left=200px, scrollbars=yes";
+
+        window.open(popUrl, "등록", popOption);
+    });
 
     // 수정/삭제 버튼
-    $(document).on("click", "#modifyDelete", function (e) {
+    $(document).on("click", "#modifyDelete", function(e){
         e.preventDefault();
         console.log("수정/삭제 버튼 작동하나요?");
         var $staffNo = $("#modifyDelete").val();
@@ -316,11 +311,11 @@
     });
 
     // 초기화 버튼
-    $(document).on("click", "#staffReset", function (e) {
+    $(document).on("click", "#staffReset", function(e){
         e.preventDefault();
         console.log("초기화 버튼 작동하나요?");
 
-        $("#searchStaffFrm").each(function (e) {
+        $("#searchStaffFrm").each(function(e){
             this.reset();
         });
     });
@@ -345,29 +340,60 @@
         $("#tagInfo").val(tagInfo);
         console.log("tagInfo = " + tagInfo);
 
-        if ($("#tagStatus").val() == 'ASC') {
+        if($("#tagStatus").val() == 'ASC'){
             var tagStatus = $("#tagStatus").val('DESC');
-        } else {
+        }else{
             var tagStatus = $("#tagStatus").val('ASC');
         }
 
+        const formData = new FormData(document.searchStaffFrm);
+        console.log("formData = " + formData);
+        const obj = {};
+        for(const [k, v] of formData){
+            obj[k] = v;
+        };
+
+        // 상세검색
+        const $detailSearch = $("[name=detailSearch]").val();
+        console.log("detailSearch = " + $detailSearch);
+
+        // OR AND
+        const orAnd = $("input[name='orAnd']:checked").val();
+        //console.log("orAnd = " + orAnd);
+
+        // paging
+        var cPage;
+        obj.cPage = cPage;
+        // 이름
+        const $staffName = $("[name=staffName]").val();
+        console.log("staffName = " + $staffName);
+
+        // 성별
+        //const $gender = $("input[name='gender']:checked").val();
+        //console.log("gender = " + $gender);
 
         // 부서
         const $departmentCode = $("select[name=departmentCode]").val();
         console.log("departmentCode = " + $departmentCode);
 
         // 학력
+        var schoolCodeCnt = $("input[name=schoolCode]:checkbox:checked").length;
+        console.log("schoolCodeCnt = " + schoolCodeCnt);
         const $schoolCodes = $("[name=schoolCode]:checked");
         const schoolCodes = $schoolCodes
             .toArray() // js array 변환
-            .map((schoolCode, i) => schoolCode.value).toString(); // schoolCode.value만 가진 배열 생성
-        console.log(schoolCodes);
+            .map((schoolCode, i) => schoolCode.value); // schoolCode.value만 가진 배열 생성
+        obj.schoolCode = schoolCodes;
+
         // 기술
+        var skillCodeCnt = $("input[name=skillCode]:checkbox:checked").length;
+        console.log("skillCodeCnt = " + skillCodeCnt);
         const $skillCodes = $("[name=skillCode]:checked");
         const skillCodes = $skillCodes
             .toArray() // js array 변환
-            .map((skillCode, i) => skillCode.value).toString(); // skillCode.value만 가진 배열 생성
-        console.log(skillCodes);
+            .map((skillCode, i) => skillCode.value); // skillCode.value만 가진 배열 생성
+        obj.skillCode = skillCodes;
+
         // 졸업일 유효성 검사
         var $startGraduateYear = $("select[name=startGraduateYear]").val();
         var $startGraduateMonth = $("select[name=startGraduateMonth]").val();
@@ -376,18 +402,18 @@
         var $endGraduateMonth = $("select[name=endGraduateMonth]").val();
         var $endGraduateDay = $("select[name=endGraduateDay]").val();
 
-        if ($startGraduateYear > $endGraduateYear) {
+        if($startGraduateYear > $endGraduateYear){
             alert("졸업일을 정확이 입력해주세요.");
             return false;
         }
 
-        if ($startGraduateMonth != "" && $endGraduateMonth != "") {
+        if($startGraduateMonth != "" && $endGraduateMonth != ""){
             // for문으로 변경해 볼 수 있다.
-            if ($startGraduateMonth < 10) {
+            if($startGraduateMonth < 10){
                 $startGraduateMonth = '0' + $startGraduateMonth;
                 $startGraduateDay = '00';
             }
-            if ($endGraduateMonth < 10) {
+            if($endGraduateMonth < 10){
                 $endGraduateMonth = '0' + $endGraduateMonth;
                 $endGraduateDay = '00';
             }
@@ -400,26 +426,20 @@
             $endGraduateDay = "";
         }
 
-        console.log($staffName);
-        console.log($departmentCode);
-        console.log(schoolCodes);
-        console.log(graduateDayFrom);
-        console.log($graduateDayTo);
-        console.log(skillCodes);
-        staffRequestDto = {
-            staffName: staffName,
-            departmentCode: departmentCode,
-            schoolCodes: schoolCodes,
-            startGraduateDay: graduateDayFrom,
-            endGraduateDay: graduateDayTo,
-            skills: skillCodes
-        }
+        obj.graduateDayFrom = $startGraduateYear + $startGraduateMonth + $startGraduateDay;
+        obj.graduateDayTo = $endGraduateYear + $endGraduateMonth + $endGraduateDay;
+
+
+        const searchStr = JSON.stringify(obj);
+        console.log("searchStr = " + searchStr);
+
+
         $.ajax({
             url: "/search",
             method: "POST",
-            data: staffRequestDto,
+            data: searchStr,
             // contentType: "application/json; charset=utf-8",
-            success(res) {
+            success(res){
                 console.log("res = " + res);
 
                 $("#tbody").html('');
@@ -452,10 +472,9 @@
         const formData = new FormData(document.searchStaffFrm);
         console.log("formData = " + formData);
         const obj = {};
-        for (const [k, v] of formData) {
+        for(const [k, v] of formData){
             obj[k] = v;
-        }
-        ;
+        };
 
         // 상세검색
         const $detailSearch = $("[name=detailSearch]").val();
@@ -465,10 +484,17 @@
         const $orAnd = $("input[name='orAnd']:checked").val();
         console.log("orAnd = " + $orAnd);
 
+        // paging
+        // var cPage;
+        // obj.cPage = cPage;
 
         // 이름
         const $staffName = $("[name=staffName]").val();
         console.log("staffName = " + $staffName);
+
+        // 성별
+        //const $gender = $("input[name='gender']:checked").val();
+        //console.log("gender = " + $gender);
 
         // 부서
         const $departmentCode = $("select[name=departmentCode]").val();
@@ -481,6 +507,7 @@
         const schoolCodes = $schoolCodes
             .toArray() // js array 변환
             .map((schoolCode, i) => schoolCode.value).toString(); // schoolCode.value만 가진 배열 생성
+        // obj.schoolCode = schoolCodes;
 
         // 기술
         var skillCodeCnt = $("input[name=skillCode]:checkbox:checked").length;
@@ -489,6 +516,7 @@
         const skillCodes = $skillCodes
             .toArray() // js array 변환
             .map((skillCode, i) => skillCode.value).toString(); // skillCode.value만 가진 배열 생성
+        // obj.skillCode = skillCodes;
 
         // 졸업일 유효성 검사
         var $startGraduateYear = $("select[name=startGraduateYear]").val();
@@ -498,18 +526,18 @@
         var $endGraduateMonth = $("select[name=endGraduateMonth]").val();
         var $endGraduateDay = $("select[name=endGraduateDay]").val();
 
-        if ($startGraduateYear > $endGraduateYear) {
+        if($startGraduateYear > $endGraduateYear){
             alert("졸업일을 정확이 입력해주세요.");
             return false;
         }
 
-        if ($startGraduateMonth != "" && $endGraduateMonth != "") {
+        if($startGraduateMonth != "" && $endGraduateMonth != ""){
             // for문으로 변경해 볼 수 있다.
-            if ($startGraduateMonth < 10) {
+            if($startGraduateMonth < 10){
                 $startGraduateMonth = '0' + $startGraduateMonth;
                 $startGraduateDay = '00';
             }
-            if ($endGraduateMonth < 10) {
+            if($endGraduateMonth < 10){
                 $endGraduateMonth = '0' + $endGraduateMonth;
                 $endGraduateDay = '00';
             }
@@ -533,13 +561,13 @@
         console.log(graduateDayFrom);
         console.log($graduateDayTo);
         console.log(skillCodes);
-        staffRequestDto = {
-            staffName: $staffName,
-            departmentCode: $departmentCode,
-            schoolCodes: schoolCodes,
-            startGraduateDay: graduateDayFrom,
-            endGraduateDay: graduateDayTo,
-            skills: skillCodes
+        staffRequestDto ={
+            staffName : $staffName,
+            departmentCode : $departmentCode,
+            schoolCode : schoolCodes,
+            startGraduateDay : graduateDayFrom,
+            endGraduateDay : graduateDayTo,
+            skills : skillCodes
         }
 
         $.ajax({
@@ -547,7 +575,7 @@
             method: "POST",
             data: staffRequestDto,
             // contentType: "application/json; charset=utf-8",
-            success(res) {
+            success(res){
                 console.log("res = " + res);
 
                 $("#tbody").html('');

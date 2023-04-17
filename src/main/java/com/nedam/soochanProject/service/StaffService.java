@@ -16,7 +16,7 @@ public interface StaffService {
 
 
 
-    List<StaffVo> searchList(String staffName, String departmentCode, String schoolCode, List<String> skillCode, String graduateDay);
+    List<StaffVo> searchList(String staffName, String departmentCode, List<String> schoolCode, List<String> skillCode, String startGraduateDay,String endGraduateDay);
 
     void delete(int i);
 

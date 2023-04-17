@@ -77,14 +77,44 @@ public class StaffServiceImpl implements StaffService {
 
     //검색
     @Override
-    public List<StaffVo> searchList(String staffName, String departmentCode, String schoolCode, List<String> skillCode, String graduateDay) {
+    public List<StaffVo> searchList(String staffName, String departmentCode, List<String> schoolCode, List<String> skillCode, String startGraduateDay, String endGraduateDay) {
 //        checkSkill(skillCode);
-        //검색 조건으로 staffName List 조회
-        List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(staffName, departmentCode, schoolCode, skillCode, graduateDay));
-        staffMapper.getSearchStaffList(SearchStaffSkillDto )
-        //staffName List로 staffSkill조건으로 return staffVo
+        List<StaffVo> staffList;
 
-        return ;
+        if (skillCode == null) {
+            staffList = staffMapper.getSearchIntegerStaffList(new SearchRequestDto(staffName, departmentCode, schoolCode, null, startGraduateDay, endGraduateDay, null,null));
+        } else {
+            List<Integer> skillCodes = stringToIntskill(skillCode);
+            //검색 조건으로 staffName List 조회
+            List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(staffName, departmentCode, schoolCode, null, startGraduateDay, endGraduateDay, null, null));
+            System.out.println("staffNoList : " + staffNoList.toString());
+            staffList = staffMapper.getSearchStaffList(new SearchStaffSkillDto(staffNoList, skillCodes));
+            //staffName List로 staffSkill조건으로 return staffVo
+        }
+
+        return staffList;
+    }
+
+    private List<Integer> stringToIntskill(List<String> skillCode) {
+        List<Integer> skillCodes = new ArrayList<>();
+        for (int i = 0; i < skillCode.size(); i++) {
+            if (skillCode.get(i) == "JAVA") {
+                skillCodes.add(31);
+            }
+            if (skillCode.get(i) == "JSP") {
+                skillCodes.add(32);
+            }
+            if (skillCode.get(i) == "ASP") {
+                skillCodes.add(33);
+            }
+            if (skillCode.get(i) == "PHP") {
+                skillCodes.add(34);
+            }
+            if (skillCode.get(i) == "DELPHI") {
+                skillCodes.add(35);
+            }
+        }
+        return skillCodes;
     }
 
     //삭제
@@ -182,7 +212,8 @@ public class StaffServiceImpl implements StaffService {
             case "Dec":
                 month = "12";
                 break;
-            default: month ="";
+            default:
+                month = "";
         }
         return month;
     }

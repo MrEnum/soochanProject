@@ -10,8 +10,11 @@ import java.util.List;
 public class SearchRequestDto {
     private String staffName;       //like
     private String departmentCode;  //where
-    private String schoolCode;      //where
+    private List<String> schoolCode;      //where
     private List<String> skillCode; //like in
-    private String graduateDay;	//where
+    private String startGraduateDay;
+    private String endGraduateDay;	//where
+    private String skills;
+    private String schoolCodes;
 
 }

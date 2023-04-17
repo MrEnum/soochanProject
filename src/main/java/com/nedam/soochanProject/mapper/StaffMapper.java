@@ -11,14 +11,16 @@ import java.util.List;
 public interface StaffMapper {
     //직원과 관련된 메서드----------------------------------
     //직원 리스트
-    List<StaffVo> getStaffList();
+    public List<StaffVo> getStaffList();
     //직원 등록
     void register(StaffVo staffVo);
     //직원 상세정보 가져오기
     StaffVo getDetail(int staffNo);
     //직원 검색리스트 가져오기
     List<Integer> getSearchIntegerList(SearchRequestDto searchRequestDto);//직원 스킬 외에 조건
-    List<StaffVo> getSearchStaffList(List<Integer> staffNoList);
+    List<StaffVo> getSearchStaffList(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
+    List<StaffVo> getSearchIntegerStaffList(SearchRequestDto searchRequestDto);//직원 스킬 조건
+
 
 
 
