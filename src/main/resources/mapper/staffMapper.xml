@@ -39,18 +39,21 @@
     </select>
 
     <!--검색쿼리-->
-    <select id="getSearchIntegerList" parameterType="int"
-            resultType="int">
-        SELECT staff_No FROM staff
+    <select id="getSearchIntegerList" parameterType="com.nedam.soochanProject.dto.SearchRequestDto"
+            resultType="_int">
+        SELECT staff_no FROM staff
         <where>
             <if test="staffName != null">
                 AND staff_name LIKE '%' || #{staffName}|| '%'
             </if>
-            <if test="departmentCode != null">
-                AND department_code = #{deparmentCode}
+            <if test="departmentCode != ''">
+                AND department_code = #{departmentCode}
             </if>
             <if test="schoolCode != null">
-                AND school_code = #{schoolCode}
+                or school_code IN
+                <foreach item="item" index="index" collection="schoolCode" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
             </if>
 
             <if test="startGraduateDay != null or endGraduateDay != null ">
@@ -79,12 +82,11 @@
                 AND staff_name LIKE '%' || #{staffName}|| '%'
             </if>
             <if test="departmentCode != null">
-                AND department_code = #{deparmentCode}
+                AND department_code = #{departmentCode}
             </if>
             <if test="schoolCode != null">
-                AND school_code IN
-                <foreach item="item" index="index" collection="schoolCode" open="(" separator="," close=")">
-                    #{item}
+                <foreach item="item" index="index" collection="schoolCode">
+                    OR school_code = #{item}
                 </foreach>
             </if>
             <if test="startGraduateDay != null or endGraduateDay != null ">
@@ -111,14 +113,18 @@
         SELECT s.*
         FROM staff s
         JOIN staff_skill ss ON s.staff_no = ss.staff_no
-        WHERE s.staff_no IN
-        <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        AND ss.skill_code IN
-        <foreach item="item" index="index" collection="skillCodeList" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <where>
+            <if test="staffNoList != null">
+                s.staff_no IN
+                <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            AND ss.skill_code IN
+            <foreach item="item" index="index" collection="skillCodeList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
         GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
         HAVING COUNT(DISTINCT ss.skill_code) = #{skillCount}
     </select>

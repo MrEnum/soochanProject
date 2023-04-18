@@ -79,38 +79,47 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<StaffVo> searchList(String staffName, String departmentCode, List<String> schoolCode, List<String> skillCode, String startGraduateDay, String endGraduateDay) {
 //        checkSkill(skillCode);
-        List<StaffVo> staffList;
+        System.out.println("departmentCode : "  + departmentCode);
+        List<String> a = (schoolCode.get(0).equals("")) ? null: schoolCode;
+        List<String> b = (skillCode.get(0).equals("")) ? null: skillCode;
+        System.out.println("skillCode and schoolCode : " + skillCode.size() + " , "  + schoolCode.size());
+        if (b == null) {
+            System.out.println("skillcode 값이 없을 때");
 
-        if (skillCode == null) {
-            staffList = staffMapper.getSearchIntegerStaffList(new SearchRequestDto(staffName, departmentCode, schoolCode, null, startGraduateDay, endGraduateDay, null,null));
+            List<StaffVo> staffList = staffMapper.getSearchIntegerStaffList(new SearchRequestDto(staffName, departmentCode.trim(),a  ,null, startGraduateDay, endGraduateDay, null,null));
+            System.out.println(staffList.toString());
+            return staffList;
         } else {
-            List<Integer> skillCodes = stringToIntskill(skillCode);
+            System.out.println("스킬코드 값이 있을 떄");
+            List<Integer> skillCodes =stringToIntskill(skillCode);
+            System.out.println(skillCodes.toString());
             //검색 조건으로 staffName List 조회
-            List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(staffName, departmentCode, schoolCode, null, startGraduateDay, endGraduateDay, null, null));
+            List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(staffName, departmentCode, a, null, startGraduateDay, endGraduateDay, null, null));
+//            staffNoList.addAll(List.of(121,122,123,124,125,126,127,128,129,130));
             System.out.println("staffNoList : " + staffNoList.toString());
-            staffList = staffMapper.getSearchStaffList(new SearchStaffSkillDto(staffNoList, skillCodes));
+            List<StaffVo> staffList = staffMapper.getSearchStaffList(new SearchStaffSkillDto(staffNoList, skillCodes));
             //staffName List로 staffSkill조건으로 return staffVo
+            System.out.println(staffList.toString());
+            return staffList;
         }
-
-        return staffList;
     }
 
     private List<Integer> stringToIntskill(List<String> skillCode) {
         List<Integer> skillCodes = new ArrayList<>();
         for (int i = 0; i < skillCode.size(); i++) {
-            if (skillCode.get(i) == "JAVA") {
+            if (skillCode.get(i).equals("JAVA")) {
                 skillCodes.add(31);
             }
-            if (skillCode.get(i) == "JSP") {
+            if (skillCode.get(i).equals("JSP")) {
                 skillCodes.add(32);
             }
-            if (skillCode.get(i) == "ASP") {
+            if (skillCode.get(i).equals("ASP")) {
                 skillCodes.add(33);
             }
-            if (skillCode.get(i) == "PHP") {
+            if (skillCode.get(i).equals("PHP")) {
                 skillCodes.add(34);
             }
-            if (skillCode.get(i) == "DELPHI") {
+            if (skillCode.get(i).equals("DELPHI")) {
                 skillCodes.add(35);
             }
         }

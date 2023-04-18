@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
       integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <!-- 사용자작성 css -->
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css"/>
+
 <!-- sock.js 추가 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
         integrity="sha512-ayb5R/nKQ3fgNrQdYynCti/n+GD0ybAhd3ACExcYvOR2J1o3HebiAe/P0oZDx5qwB+xkxuKG6Nc0AFTsPT/JDQ=="
@@ -32,7 +32,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"
         integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<%--dataTable--%>
+<link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
+<script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
 <style>
     th, td {
         text-align: center;
@@ -78,13 +80,13 @@
                 <div class="department-check">
                     <select name="departmentCode" id="departmentCode">
                         <option value=""></option>
-                        <option value="1">컨설팅사업부</option>
-                        <option value="2">하이테크사업부</option>
-                        <option value="3">SI사업부</option>
-                        <option value="4">반도체사업부</option>
-                        <option value="5">기업부설연구소</option>
-                        <option value="6">전략기획팀</option>
-                        <option value="7">경영지원팀</option>
+                        <option value="컨설팅사업부">컨설팅사업부</option>
+                        <option value="하이테크사업부">하이테크사업부</option>
+                        <option value="SI사업부">SI사업부</option>
+                        <option value="반도체사업부">반도체사업부</option>
+                        <option value="기업부설연구소">기업부설연구소</option>
+                        <option value="전략기획팀">전략기획팀</option>
+                        <option value="경영지원팀">경영지원팀</option>
                     </select>
                 </div>
             </td>
@@ -385,11 +387,11 @@
             // for문으로 변경해 볼 수 있다.
             if ($startGraduateMonth < 10) {
                 $startGraduateMonth = '0' + $startGraduateMonth;
-                $startGraduateDay = '00';
+                $startGraduateDay = '01';
             }
             if ($endGraduateMonth < 10) {
                 $endGraduateMonth = '0' + $endGraduateMonth;
-                $endGraduateDay = '00';
+                $endGraduateDay = '01';
             }
         } else {
             $startGraduateYear = "";
@@ -400,14 +402,14 @@
             $endGraduateDay = "";
         }
 
-        console.log($staffName);
+        console.log(staffName);
         console.log($departmentCode);
         console.log(schoolCodes);
         console.log(graduateDayFrom);
         console.log($graduateDayTo);
         console.log(skillCodes);
         staffRequestDto = {
-            staffName: staffName,
+            staffName: $staffName,
             departmentCode: departmentCode,
             schoolCodes: schoolCodes,
             startGraduateDay: graduateDayFrom,
@@ -507,11 +509,11 @@
             // for문으로 변경해 볼 수 있다.
             if ($startGraduateMonth < 10) {
                 $startGraduateMonth = '0' + $startGraduateMonth;
-                $startGraduateDay = '00';
+                $startGraduateDay = '01';
             }
             if ($endGraduateMonth < 10) {
                 $endGraduateMonth = '0' + $endGraduateMonth;
-                $endGraduateDay = '00';
+                $endGraduateDay = '01';
             }
         } else {
             $startGraduateYear = "";
@@ -527,13 +529,14 @@
 
         // const searchStr = JSON.stringify(obj);
         // console.log("searchStr = " + searchStr);
-        console.log($staffName);
+        console.log(staffName);
         console.log($departmentCode);
         console.log(schoolCodes);
         console.log(graduateDayFrom);
-        console.log($graduateDayTo);
+        console.log(graduateDayTo);
         console.log(skillCodes);
-        staffRequestDto = {
+        console.log("여기에유~");
+        const staffRequestDto = {
             staffName: $staffName,
             departmentCode: $departmentCode,
             schoolCodes: schoolCodes,
@@ -544,34 +547,29 @@
 
         $.ajax({
             url: "/search",
-            method: "POST",
+            type: 'post',
+            dataType: 'text',
             data: staffRequestDto,
-            // contentType: "application/json; charset=utf-8",
-            success(res) {
-                console.log("res = " + res);
-
-                $("#tbody").html('');
-
-                $.each(res.selectStaffInfoByTypeList, (k, v) => {
-                    const graduateDay = v.graduateDay.substr(0, 4) + "-" + v.graduateDay.substr(4, 2) + "-" + v.graduateDay.substr(6, 2);
-                    $("#tbody").append(`
-							<tr>
-								<td>\${v.staffNo}</td>
-								<td>\${v.staffName}</td>
-								<td>\${v.gender}</td>
-								<td>\${v.departmentName}</td>
-								<td>\${graduateDay}</td>
-								<td><button value="\${v.staffNo}"  id=modifyDelete type="button" class="btn btn-secondary float-right">수정/삭제</button></td>
-							</tr>
-
-
-							`);
+            success: function (jsonString) {
+                // var jsonArray = JSON.parse(jsonString);
+                $('.table-bordered').DataTable().destroy();
+                console.log("백에서 가져온 값 : " + jsonString );
+                var dataTable = $('.table-bordered').DataTable({
+                    data: jsonString,
+                    columns: [
+                        {data: "staffNo"},
+                        {data: "staffName"},
+                        {data: "departmentCode"},
+                        {data: "graduateDay"}
+                    ]
                 });
-                $(".pagebar").html('').html(res["pagebar"]);
-                $("#totalCountContainer").html(`검색건수 → \${res.totalContent}건`);
             },
-            error: console.log
+            error: function(){
+                console.log('데이터를 가져오지 못했습니다.');
+            }
+
         });
+
 
     }
 

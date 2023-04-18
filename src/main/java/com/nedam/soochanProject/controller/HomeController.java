@@ -86,23 +86,7 @@ public class HomeController {
     }
 
 
-    @PostMapping("/search")
-    @ResponseBody
-    public String search(Model model, SearchRequestDto searchRequestDto) {
-        System.out.println("search컨트롤 들어오긴하네!" + searchRequestDto.toString());
-        if (searchRequestDto == null) {
-            model.addAttribute("staff", staffMapper.getAllStaff());
-        } else {
-            //for문보다 더 빠름. 불변리스트 어쩌고
-            List<String> skillList = List.of(searchRequestDto.getSkills().split(","));
-            staffService.searchList("문", null, null, Collections.singletonList("JAVA"), "1991-01-01", "2022-01-01");
-        }
-//searchRequestDto.getStaffName(),searchRequestDto.getDepartmentCode(),searchRequestDto.getSchoolCode(), skillList, searchRequestDto.getGraduateDay()
 
-
-//        model.addAttribute("Staff", list);
-        return "home/success";
-    }
 
     @DeleteMapping("/delete/{staffNo}")
     public String delete(@PathVariable int staffNo) {
