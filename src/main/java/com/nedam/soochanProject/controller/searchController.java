@@ -42,7 +42,14 @@ public class searchController {
                 endGra = searchRequestDto.getEndGraduateDay().substring(0, 4) + "-" + searchRequestDto.getEndGraduateDay().substring(4, 6) + "-" + searchRequestDto.getEndGraduateDay().substring(6, 8);
             }
 
-            return staffService.searchList(searchRequestDto.getStaffName(), searchRequestDto.getDepartmentCode(), schoolList, skillList, startGra, endGra);
+            List<StaffVo> staffVoList = staffService.searchList(searchRequestDto.getStaffName(), searchRequestDto.getDepartmentCode(), schoolList, skillList, startGra, endGra);
+            return staffVoList;
         }
+    }
+
+    @PostMapping("/searchAll")
+    @ResponseBody
+    public List<StaffVo> searchAll() {
+        return staffMapper.getAllStaff();
     }
 }

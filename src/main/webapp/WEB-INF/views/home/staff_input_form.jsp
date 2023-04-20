@@ -38,7 +38,7 @@
             setDate();
 
             $("#cancelBtn").click(function(){
-                location.href='registform.do';
+                location.href='register';
             });
 
             $('input[type="checkbox"][name="gender"]').click(function(){
@@ -144,14 +144,14 @@
                 $(".year").append("<option value='" + y + "'>" + y + "</option>");
             }
 
-            ;		$(".month").append("<option value=''></option>");
-            for (var i = 1; i <= 12; i++) {
-                if(i<10){
-                    $(".month").append("<option value='" +"0"+ i + "'>" + "0"+i + "</option>");
-                }else{
-                    $(".month").append("<option value='" + i + "'>" + i + "</option>");
-                }
-            }
+            // ;		$(".month").append("<option value=''></option>");
+            // for (var i = 1; i <= 12; i++) {
+            //     if(i<10){
+            //         $(".month").append("<option value='" +"0"+ i + "'>" + "0"+i + "</option>");
+            //     }else{
+            //         $(".month").append("<option value='" + i + "'>" + i + "</option>");
+            //     }
+            // }
 
         }
 
@@ -211,6 +211,9 @@
             <select style="width:10%;" class="year" id="sYear">
             </select>년
             <select style="width:7%;" class="month" id="sMonth">
+                <option value=""></option>
+                <option value="02">02</option>
+                <option value="08">08</option>
             </select>월
         </td>
     </tr>

@@ -34,10 +34,114 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <%--dataTable--%>
 <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
+<%--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>--%>
 <script src="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.js"></script>
 <style>
-    th, td {
+    table {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    td, th {
         text-align: center;
+        padding: 2px 10px 2px 10px;
+    }
+
+    th {
+        background-color: lightgray;
+        cursor: pointer;
+    }
+
+    table, td, th {
+
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    .search_btns {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .search_btn {
+        width: 40%;
+        text-align: center;
+    }
+
+    .other_btns {
+        width: 20%;
+        text-align: right;
+    }
+
+    .graduate_day_box {
+        display: flex;
+    }
+
+    .date_from_box, .date_to_box {
+        width: 49%;
+    }
+
+    .date_y {
+        width: 20%;
+    }
+
+    .date_m, .date_d {
+        width: 10%;
+    }
+
+    .counts p {
+        margin-left: 10%;
+        margin-bottom: 0px;
+    }
+
+    table.dataTable {
+        width: 500px;
+    }
+
+    .table-hover {
+        margin-right: 100%;
+    }
+
+    .col-sm-12 {
+        padding-left: 7%;
+    }
+
+    .col-sm-5 {
+        margin-left: 89px;
+
+    }
+
+    body {
+        width: 100%;
+    }
+
+
+    #tbl-board_info {
+
+    }
+
+    #tbl-board_wrapper > div:nth-child(3) {
+        margin-left: 40%;
+    }
+
+    #tbl-board {
+        margin-left: 28%;
+        width: 45%;
+    }
+
+    #tbl-board_wrapper > div:nth-child(2) {
+        width: 100%;
+    }
+
+    .form-check-label {
+        margin-left: 15px;
+        padding-right: 10px;
+    }
+
+    #searchStaffFrm > table > tbody > tr:nth-child(3) > td:nth-child(2) {
+        padding-right: 13%;
     }
 </style>
 
@@ -99,21 +203,27 @@
                         <input class="form-check-input" type="checkbox" value="고졸" id="flexCheckDefault"
                                name="schoolCode">
                         <label class="form-check-label" for="flexCheckDefault">
-                            고졸
+                            <div>
+                                고졸
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="전문대졸" id="flexCheckChecked"
                                name="schoolCode">
                         <label class="form-check-label" for="flexCheckChecked">
-                            전문대졸
+                            <div>
+                                전문대졸
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="일반대졸" id="flexCheckChecked"
                                name="schoolCode">
                         <label class="form-check-label" for="flexCheckChecked">
-                            일반대졸
+                            <div>
+                                일반대졸
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -124,31 +234,41 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="JAVA" name="skillCode" id="skill_1">
                         <label class="form-check-label" for="skill_1">
-                            Java
+                            <div>
+                                Java
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="JSP" name="skillCode" id="skill_2">
                         <label class="form-check-label" for="skill_2">
-                            JSP
+                            <div>
+                                JSP
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="ASP" name="skillCode" id="skill_3">
                         <label class="form-check-label" for="skill_3">
-                            ASP
+                            <div>
+                                ASP
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="PHP" name="skillCode" id="skill_4">
                         <label class="form-check-label" for="skill_4">
-                            PHP
+                            <div>
+                                PHP
+                            </div>
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="DELPHI" name="skillCode" id="skill_5">
                         <label class="form-check-label" for="skill_5">
-                            Delphi
+                            <div>
+                                Delphi
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -168,8 +288,8 @@
 
                 <select name="startGraduateMonth">
                     <option value=""></option>
-                    <option value="2">02</option>
-                    <option value="2">08</option>
+                    <option value="02">02</option>
+                    <option value="08">08</option>
                 </select>
                 월
 
@@ -195,12 +315,12 @@
             </td>
         </tr>
         <tr>
-            <td class="align-middle">상세검색</td>
+            <td class="align-middle">추가기술</td>
             <td colspan="5">
                 <div class="row">
                     <div class="align-self-center">
                         <input id="addInfoData" class="form-control" type="search" name="addInfoData" value=""
-                               aria-label="Search" style="width:260px;">
+                               aria-label="Search" style="width:260px; margin-left: 15px;">
                     </div>
                     <div class="row">
                         <div class="gender-check" style="margin-left: 30px;">
@@ -217,7 +337,10 @@
                             </label>
                         </div>
                         <div>
-                            <input type="submit" class="btn btn-secondary float-right" id="searchDetail" value="검색">
+                            <input type="submit" class="btn btn-secondary float-right" id="addSkill" onclick="addSkill()" value="추가">
+                        </div>
+                        <div class="addTextbox">
+
                         </div>
                     </div>
                 </div>
@@ -227,14 +350,16 @@
     </table>
 
     <br/>
-    <div class="row">
-        <div class="col-sm-6 float-right">
-            <input type="submit" class="btn btn-secondary float-right" id="staffSearch" value="검색">
-        </div>
-        <div class="col-sm-6 float-right">
-            <button type="button" class="btn btn-secondary float-right" id="staffInput">등록</button>
+    <div class="row" >
+        <div class="col-sm-6 float-right" style="margin-left: 50%;">
+            <button type="button" class="btn btn-secondary float-right" id="staffInput"  style="margin-right: 10px;" onclick="goRegister()">사원등록
+            </button>
             <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="staffReset">초기화
             </button>
+            <input type="submit" class="btn btn-secondary float-right" id="staffSearch" style="margin-right:10px;" value="전부검색">
+            <input type="submit" class="btn btn-secondary float-right" id="searchDetail" style="margin-right:10px;" value="상세검색"
+
+
             <%--			<button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="searchAll">전부검색</button>--%>
 
             <input type="hidden" name="tagInfo" id="tagInfo"/>
@@ -256,15 +381,15 @@
     <table id="tbl-board" class="table table-hover">
         <thead>
         <tr>
-            <th class="col-2" data-tag="staff_no" style="cursor:pointer;">번호</th>
-            <th class="col-2" data-tag="staff_name" style="cursor:pointer;">이름</th>
+            <th class="col-2" data-tag="staff_no" style="">번호</th>
+            <th class="col-2" data-tag="staff_name" style="">이름</th>
             <%--			<th class="col-2">성별</th>--%>
             <th class="col-2">부서</th>
             <th class="col-2">졸업일</th>
-            <th class="col-2"></th>
+            <th class="col-2">수정/삭제</th>
         </tr>
         </thead>
-        <!-- 반복접근할 요소 : items="${list} -->
+        <!-- 반복접근할 요소 : items="$list} -->
         <!-- 꺼내면 cmmunityEntity니까 communityEntity라는 이름으로 사용 -->
         <tbody id="tbody">
 
@@ -305,17 +430,12 @@
 
 
     // 수정/삭제 버튼
-    $(document).on("click", "#modifyDelete", function (e) {
-        e.preventDefault();
-        console.log("수정/삭제 버튼 작동하나요?");
-        var $staffNo = $("#modifyDelete").val();
-        console.log("삭제할 staffNo = " + $staffNo);
+    function GoUpdate(number) {
+        console.log("수정페이지 이동");
+        let openWin = window.open("/getupdate?staffNo=" + number, "수정 페이지",
+            "width=900, height=900, top=2050, left=2000");
 
-        let popUrl = `${pageContext.request.contextPath}/staff/staff_updel_form.do?staffNo=\${\$staffNo}`;
-        let popOption = "width = 1500px, height=500px, top=100px, left=200px, scrollbars=yes";
-
-        window.open(popUrl, "수정/삭제", popOption);
-    });
+    }
 
     // 초기화 버튼
     $(document).on("click", "#staffReset", function (e) {
@@ -328,126 +448,69 @@
     });
 
     // 검색 버튼
-    $("#staffSearch").click(e => {
+    $("#searchDetail").click(e => {
         console.log("검색 버튼 작동");
         e.preventDefault();
         searchGetPage();
     });
 
     // 상세검색 버튼
-    $("#searchDetail").click(e => {
-        console.log("상세검색 버튼 작동");
+    $("#staffSearch").click(e => {
+        console.log("전부검색 버튼 작동");
         e.preventDefault();
-        searchGetPage();
+        searchAllPage();
     });
 
-    // 정렬
-    $("th").click((e) => {
-        var tagInfo = $(e.target).data('tag');
-        $("#tagInfo").val(tagInfo);
-        console.log("tagInfo = " + tagInfo);
+    function addSkill(){
 
-        if ($("#tagStatus").val() == 'ASC') {
-            var tagStatus = $("#tagStatus").val('DESC');
-        } else {
-            var tagStatus = $("#tagStatus").val('ASC');
-        }
+    }
 
-
-        // 부서
-        const $departmentCode = $("select[name=departmentCode]").val();
-        console.log("departmentCode = " + $departmentCode);
-
-        // 학력
-        const $schoolCodes = $("[name=schoolCode]:checked");
-        const schoolCodes = $schoolCodes
-            .toArray() // js array 변환
-            .map((schoolCode, i) => schoolCode.value).toString(); // schoolCode.value만 가진 배열 생성
-        console.log(schoolCodes);
-        // 기술
-        const $skillCodes = $("[name=skillCode]:checked");
-        const skillCodes = $skillCodes
-            .toArray() // js array 변환
-            .map((skillCode, i) => skillCode.value).toString(); // skillCode.value만 가진 배열 생성
-        console.log(skillCodes);
-        // 졸업일 유효성 검사
-        var $startGraduateYear = $("select[name=startGraduateYear]").val();
-        var $startGraduateMonth = $("select[name=startGraduateMonth]").val();
-        var $startGraduateDay = $("select[name=startGraduateDay]").val();
-        var $endGraduateYear = $("select[name=endGraduateYear]").val();
-        var $endGraduateMonth = $("select[name=endGraduateMonth]").val();
-        var $endGraduateDay = $("select[name=endGraduateDay]").val();
-
-        if ($startGraduateYear > $endGraduateYear) {
-            alert("졸업일을 정확이 입력해주세요.");
-            return false;
-        }
-
-        if ($startGraduateMonth != "" && $endGraduateMonth != "") {
-            // for문으로 변경해 볼 수 있다.
-            if ($startGraduateMonth < 10) {
-                $startGraduateMonth = '0' + $startGraduateMonth;
-                $startGraduateDay = '01';
-            }
-            if ($endGraduateMonth < 10) {
-                $endGraduateMonth = '0' + $endGraduateMonth;
-                $endGraduateDay = '01';
-            }
-        } else {
-            $startGraduateYear = "";
-            $endGraduateYear = "";
-            $startGraduateMonth = "";
-            $endGraduateMonth = "";
-            $startGraduateDay = "";
-            $endGraduateDay = "";
-        }
-
-        console.log(staffName);
-        console.log($departmentCode);
-        console.log(schoolCodes);
-        console.log(graduateDayFrom);
-        console.log($graduateDayTo);
-        console.log(skillCodes);
-        staffRequestDto = {
-            staffName: $staffName,
-            departmentCode: departmentCode,
-            schoolCodes: schoolCodes,
-            startGraduateDay: graduateDayFrom,
-            endGraduateDay: graduateDayTo,
-            skills: skillCodes
-        }
+    function searchAllPage() {
         $.ajax({
-            url: "/search",
-            method: "POST",
-            data: staffRequestDto,
-            // contentType: "application/json; charset=utf-8",
-            success(res) {
-                console.log("res = " + res);
+            url: "/searchAll",
+            type: 'post',
+            dataType: 'text',
+            // data: staffRequestDto,
+            success: function (jsonString) {
+                var jsonArray = JSON.parse(jsonString);
+                $('#tbl-board').DataTable().destroy();
+                console.log("백에서 가져온 값 : " + jsonString);
+                //공식홈페이지에선 데이터가 100,000건 이상이면 서버사이드로 처리하라고 권장하고 있습니다.
+                var dataTable = $('#tbl-board').DataTable({
 
-                $("#tbody").html('');
+                    "searching": false,
+                    "order": [[0, "desc"]],
+                    "pageLength": 4,
+                    "lengthChange": false,
 
-                $.each(res.selectStaffInfoByTypeList, (k, v) => {
-                    const graduateDay = v.graduateDay.substr(0, 4) + "-" + v.graduateDay.substr(4, 2) + "-" + v.graduateDay.substr(6, 2);
-                    $("#tbody").append(`
-							<tr>
-								<td>\${v.staffNo}</td>
-								<td>\${v.staffName}</td>
-<!--								<td>\${v.gender}</td>-->
-								<td>\${v.departmentName}</td>
-								<td>\${graduateDay}</td>
-								<td><button value="\${v.staffNo}"  id=modifyDelete type="button" class="btn btn-secondary float-right">수정/삭제</button></td>
-							</tr>
-
-
-							`);
+                    "ordering": true,
+                    "columnDefs": [
+                        {"width": "25px", "targets": 0},
+                        {"width": "27px", "targets": 1},
+                        {"width": "70px", "targets": 2},
+                        {"width": "50px", "targets": 3},
+                        {"width": "60px", "targets": 4}
+                    ],
+                    data: jsonArray,
+                    columns: [
+                        {data: "staffNo"},
+                        {data: "staffName"},
+                        {data: "departmentCode"},
+                        {data: "graduateDay"},
+                        {
+                            data: "staffNo",
+                            render: function (data) {
+                                return '<button onclick="GoUpdate(' + data + ')">' + '수정/삭제' + '</button>';
+                            }
+                        }
+                    ]
                 });
-                $(".pagebar").html('').html(res["pagebar"]);
-                $("#totalCountContainer").html(`검색건수 → \${res.totalContent}건`);
             },
-            error: console.log
+            error: function () {
+                console.log('데이터를 가져오지 못했습니다.');
+            }
         });
-    });
-
+    }
 
     function searchGetPage(cPage) {
 
@@ -527,14 +590,7 @@
         var graduateDayFrom = $startGraduateYear + $startGraduateMonth + $startGraduateDay;
         var graduateDayTo = $endGraduateYear + $endGraduateMonth + $endGraduateDay;
 
-        // const searchStr = JSON.stringify(obj);
-        // console.log("searchStr = " + searchStr);
-        console.log(staffName);
-        console.log($departmentCode);
-        console.log(schoolCodes);
-        console.log(graduateDayFrom);
-        console.log(graduateDayTo);
-        console.log(skillCodes);
+
         console.log("여기에유~");
         const staffRequestDto = {
             staffName: $staffName,
@@ -551,25 +607,51 @@
             dataType: 'text',
             data: staffRequestDto,
             success: function (jsonString) {
-                // var jsonArray = JSON.parse(jsonString);
-                $('.table-bordered').DataTable().destroy();
-                console.log("백에서 가져온 값 : " + jsonString );
-                var dataTable = $('.table-bordered').DataTable({
-                    data: jsonString,
+                var jsonArray = JSON.parse(jsonString);
+                $('#tbl-board').DataTable().destroy();
+                console.log("백에서 가져온 값 : " + jsonString);
+                //공식홈페이지에선 데이터가 100,000건 이상이면 서버사이드로 처리하라고 권장하고 있습니다.
+                var dataTable = $('#tbl-board').DataTable({
+
+                    "searching": false,
+                     "order": [[0, "desc"]],
+                    "pageLength": 4,
+                    "lengthChange": false,
+
+                    "columnDefs": [
+                        {"width": "25px", "targets": 0},
+                        {"width": "27px", "targets": 1},
+                        {"width": "70px", "targets": 2},
+                        {"width": "50px", "targets": 3},
+                        {"width": "60px", "targets": 4}
+                    ],
+                    data: jsonArray,
                     columns: [
                         {data: "staffNo"},
                         {data: "staffName"},
                         {data: "departmentCode"},
-                        {data: "graduateDay"}
+                        {data: "graduateDay"},
+                        {
+                            data: "staffNo",
+                            render: function (data) {
+                                return '<button onclick="GoUpdate(' + data + ')">' + '수정/삭제' + '</button>';
+                            }
+                        }
                     ]
                 });
             },
-            error: function(){
+            error: function () {
                 console.log('데이터를 가져오지 못했습니다.');
             }
-
         });
+    }
 
+
+
+    function goRegister() {
+        console.log("등록페이지 이동");
+        let openWin = window.open("/register", "등록 페이지",
+            "width=900, height=900, top=2050, left=2000");
 
     }
 
