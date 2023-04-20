@@ -143,6 +143,12 @@
     #searchStaffFrm > table > tbody > tr:nth-child(3) > td:nth-child(2) {
         padding-right: 13%;
     }
+
+    .newskill {
+        border: 1px solid;
+        padding: 10px;
+    }
+
 </style>
 
 <form id="searchStaffFrm" name="searchStaffFrm">
@@ -324,24 +330,29 @@
                     </div>
                     <div class="row">
                         <div class="gender-check" style="margin-left: 30px;">
-                            <input class="form-check-input" type="checkbox" value="or" id="OR" name="add_info_type">
+                            <input class="form-check-input" type="radio" value="or" id="OR" name="add_info_type">
                             <label class="form-check-label" for="OR">
                                 OR
                             </label>
                         </div>
                         &nbsp;
                         <div class="gender-check">
-                            <input class="form-check-input" type="checkbox" value="and" id="AND" name="add_info_type">
+                            <input class="form-check-input" type="radio" value="and" id="AND" name="add_info_type"
+                                   checked>
                             <label class="form-check-label" for="AND">
                                 AND
                             </label>
                         </div>
-                        <div>
-                            <input type="submit" class="btn btn-secondary float-right" id="addSkill" onclick="addSkill()" value="추가">
-                        </div>
-                        <div class="addTextbox">
 
-                        </div>
+
+                    </div>
+                    <div>
+                        <input type="submit" class="btn btn-secondary float-right" id="add-Skill"
+                               style="margin-left: 15px;" value="추가">
+                        <%--                        onclick="addSkill()"--%>
+                    </div>
+                    <div class="skill-box" id="skill-box" style="margin-top:5px;">
+
                     </div>
                 </div>
             </td>
@@ -350,14 +361,17 @@
     </table>
 
     <br/>
-    <div class="row" >
+    <div class="row">
         <div class="col-sm-6 float-right" style="margin-left: 50%;">
-            <button type="button" class="btn btn-secondary float-right" id="staffInput"  style="margin-right: 10px;" onclick="goRegister()">사원등록
+            <button type="button" class="btn btn-secondary float-right" id="staffInput" style="margin-right: 10px;"
+                    onclick="goRegister()">사원등록
             </button>
             <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="staffReset">초기화
             </button>
-            <input type="submit" class="btn btn-secondary float-right" id="staffSearch" style="margin-right:10px;" value="전부검색">
-            <input type="submit" class="btn btn-secondary float-right" id="searchDetail" style="margin-right:10px;" value="상세검색"
+            <input type="submit" class="btn btn-secondary float-right" id="staffSearch" style="margin-right:10px;"
+                   value="전부검색">
+            <input type="submit" class="btn btn-secondary float-right" id="searchDetail" style="margin-right:10px;"
+                   value="상세검색"
 
 
             <%--			<button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="searchAll">전부검색</button>--%>
@@ -372,9 +386,6 @@
 <br/>
 <br/>
 
-<div class="float-right" id="totalCountContainer">
-    <p>검색건수 → ${totalContent}건</p>
-</div>
 
 <!-- 리스트 시작 -->
 <div id="staffContainer">
@@ -402,31 +413,44 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $(".dropdown-toggle").dropdown();
-    });
+    let skillNum = 5;
 
-    // 상세검색 토글
-    $('input[type="checkbox"][name="orAnd"]').click(function () {
-        // 만약에 체크박스가 클릭되어있으면,
-        if ($(this).prop('checked')) {
-            // 체크박스 전체를 checked 해제 후,
-            $('input[type="checkbox"][name="orAnd"]').prop('checked', false);
-            // click한 요소만 true로 지정
-            $(this).prop('checked', true);
+    function addSkill() {
+
+
+        let value1 = $('#addInfoData').val().toUpperCase();
+        let skillList = ["JAVA", "JSP", "ASP", "PHP", "DELPHI"];
+        console.log("value : " + value1);
+        var spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+        console.log();
+        let check = 0;
+        // spanValues 변수에 저장된 span 요소의 값을 출력
+        for (var i = 0; i < spanValues.length; i++) {
+            console.log(i + ': ' + spanValues[i].innerHTML);
+            console.log(spanValues[i].innerHTML);
+            console.log(value1);
+            if (value1 === spanValues[i].innerHTML.trim()) {
+                console.log("발동이 안되는거야?");
+                check += 1;
+            }
         }
-    });
+        for (var j = 0; j < skillList.length; j++) {
+            console.log("스킬리스트 : " + skillList[j]);
+            if (value1 === skillList[j] || value1 ==="") {
+                check += 1;
+            }
+        }
+        if (check == 0) {
+            let temphtml = '<span class="newskill" style="margin-left: 7px;" value="' + value1 + '" onclick="deleteDiv(this)" >' + value1 + ' </span>';
 
-    // // 성별 토글
-    // $('input[type="checkbox"][name="gender"]').click(function(){
-    // 	// 만약에 체크박스가 클릭되어있으면,
-    // 	if($(this).prop('checked')){
-    // 		// 체크박스 전체를 checked 해제 후,
-    // 		$('input[type="checkbox"][name="gender"]').prop('checked', false);
-    // 		// click한 요소만 true로 지정
-    // 		$(this).prop('checked', true);
-    // 	}
-    // });
+            // target-div 요소 내의 모든 span 요소를 선택하여 spanValues 변수에 저장
+
+            $('.skill-box').append(temphtml);
+            console.log(check);
+        } else {
+            alert("이미 포함되어 있거나 비어있습니다.")
+        }
+    }
 
 
     // 수정/삭제 버튼
@@ -460,10 +484,12 @@
         e.preventDefault();
         searchAllPage();
     });
+    $("#add-Skill").click(e => {
+        console.log("스킬추가 작동");
+        e.preventDefault();
+        addSkill();
+    });
 
-    function addSkill(){
-
-    }
 
     function searchAllPage() {
         $.ajax({
@@ -477,7 +503,9 @@
                 console.log("백에서 가져온 값 : " + jsonString);
                 //공식홈페이지에선 데이터가 100,000건 이상이면 서버사이드로 처리하라고 권장하고 있습니다.
                 var dataTable = $('#tbl-board').DataTable({
-
+                    "language": {
+                        info: '검색건수→ _TOTAL_ 건'
+                    },
                     "searching": false,
                     "order": [[0, "desc"]],
                     "pageLength": 4,
@@ -526,9 +554,10 @@
         const $detailSearch = $("[name=detailSearch]").val();
         console.log("detailSearch = " + $detailSearch);
 
-        // OR AND
-        const $orAnd = $("input[name='orAnd']:checked").val();
-        console.log("orAnd = " + $orAnd);
+
+        var orAnd = $('input[name="add_info_type"]:checked').val();
+
+        console.log("orAnd : " + orAnd);
 
 
         // 이름
@@ -598,7 +627,8 @@
             schoolCodes: schoolCodes,
             startGraduateDay: graduateDayFrom,
             endGraduateDay: graduateDayTo,
-            skills: skillCodes
+            skills: skillCodes,
+            andOr: orAnd
         }
 
         $.ajax({
@@ -612,9 +642,11 @@
                 console.log("백에서 가져온 값 : " + jsonString);
                 //공식홈페이지에선 데이터가 100,000건 이상이면 서버사이드로 처리하라고 권장하고 있습니다.
                 var dataTable = $('#tbl-board').DataTable({
-
+                    "language": {
+                        info: '검색건수→ _TOTAL_ 건'
+                    },
                     "searching": false,
-                     "order": [[0, "desc"]],
+                    "order": [[0, "desc"]],
                     "pageLength": 4,
                     "lengthChange": false,
 
@@ -647,7 +679,6 @@
     }
 
 
-
     function goRegister() {
         console.log("등록페이지 이동");
         let openWin = window.open("/register", "등록 페이지",
@@ -655,6 +686,10 @@
 
     }
 
+    // target-div를 클릭했을 때 해당 요소를 삭제하는 함수
+    function deleteDiv(element) {
+        element.parentNode.removeChild(element);
+    }
 
 </script>
 

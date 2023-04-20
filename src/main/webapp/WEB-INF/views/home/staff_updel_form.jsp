@@ -40,7 +40,7 @@
     <script>
         $(function () {
             setDate();
-            <c:forEach items="${staff.skillCode}" var="arr">
+            <c:forEach items="${skillList}" var="arr">
             $("input[value=${arr}][name=skill]").attr("checked", true);
             </c:forEach>
 
@@ -224,15 +224,15 @@
         <th>기술</th>
         <td colspan="3">
             <input type="checkbox" name="skill" value="JAVA"
-                   <c:if test="${staff.skillCode eq '31' }">checked</c:if>><label>Java</label>
+                   <c:if test="${skillList eq 'JAVA' }">checked</c:if>><label>Java</label>
             <input type="checkbox" name="skill" value="JSP"
-                   <c:if test="${staff.skillCode eq '32' }">checked</c:if>><label>JSP</label>
-            <input type="checkbox" name="skill" value="ASP"
-                   <c:if test="${staff.skillCode eq '33' }">checked</c:if>><label>ASP</label>
+                   <c:if test="${skillList eq 'JSP' }">checked</c:if>><label>JSP</label>
+            <input type="checkbox" name="skill" value="33"
+                   <c:if test="${skillList eq 'ASP' }">checked</c:if>><label>ASP</label>
             <input type="checkbox" name="skill" value="PHP"
-                   <c:if test="${staff.skillCode eq '34' }">checked</c:if>><label>PHP</label>
+                   <c:if test="${skillList eq 'PHP' }">checked</c:if>><label>PHP</label>
             <input type="checkbox" name="skill" value="DELPHI"
-                   <c:if test="${staff.skillCode eq '35' }">checked</c:if>><label>Delphi</label>
+                   <c:if test="${skillList eq 'DELPHI' }">checked</c:if>><label>Delphi</label>
         </td>
     </tr>
     <tr>

@@ -65,6 +65,7 @@ public class HomeController {
 
         //Date타입에서 자바스크립트단에 맞게 바꿔서 문자열로 보내주기
         System.out.println(staffService.getDetail(staffNo));
+        System.out.println(dto.getSkillCode());
         model.addAttribute("staff", dto);
         model.addAttribute("skillList", dto.getSkillCode());
         model.addAttribute("yearMonth", date);

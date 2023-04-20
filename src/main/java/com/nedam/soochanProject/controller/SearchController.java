@@ -6,18 +6,15 @@ import com.nedam.soochanProject.mapper.StaffMapper;
 import com.nedam.soochanProject.service.StaffService;
 import com.nedam.soochanProject.serviceImpl.StaffServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class searchController {
+public class SearchController {
 
     private final StaffService staffService;
     private final StaffServiceImpl staffServiceImpl;
@@ -42,7 +39,7 @@ public class searchController {
                 endGra = searchRequestDto.getEndGraduateDay().substring(0, 4) + "-" + searchRequestDto.getEndGraduateDay().substring(4, 6) + "-" + searchRequestDto.getEndGraduateDay().substring(6, 8);
             }
 
-            List<StaffVo> staffVoList = staffService.searchList(searchRequestDto.getStaffName(), searchRequestDto.getDepartmentCode(), schoolList, skillList, startGra, endGra);
+            List<StaffVo> staffVoList = staffService.searchList(searchRequestDto.getStaffName(), searchRequestDto.getDepartmentCode(), schoolList, skillList, startGra, endGra, searchRequestDto.getAndOr());
             return staffVoList;
         }
     }

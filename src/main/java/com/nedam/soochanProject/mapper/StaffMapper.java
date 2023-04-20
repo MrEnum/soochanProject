@@ -18,7 +18,8 @@ public interface StaffMapper {
     StaffVo getDetail(int staffNo);
     //직원 검색리스트 가져오기
     List<Integer> getSearchIntegerList(SearchRequestDto searchRequestDto);//직원 스킬 외에 조건
-    List<StaffVo> getSearchStaffList(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
+    List<StaffVo> getSearchStaffListOr(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
+    List<StaffVo> getSearchStaffListAnd(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
     List<StaffVo> getSearchIntegerStaffList(SearchRequestDto searchRequestDto);//직원 스킬 조건
 
 

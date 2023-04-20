@@ -18,5 +18,17 @@ public class SearchRequestDto {
     private String endGraduateDay;	//where
     private String skills;
     private String schoolCodes;
+    private String andOr;
 
+    public SearchRequestDto(String staffName, String departmentCode, List<String> schoolCode, List<String> skillCode, String startGraduateDay, String endGraduateDay,String skills, String schoolCodes){
+        this.staffName = staffName;
+        this.departmentCode = departmentCode;
+        this.schoolCode = schoolCode;
+        this.skillCode = skillCode;
+        this.startGraduateDay = startGraduateDay;
+        this.endGraduateDay = endGraduateDay;
+        this.skills = skills;
+        this.schoolCodes = schoolCodes;
+
+    }
 }

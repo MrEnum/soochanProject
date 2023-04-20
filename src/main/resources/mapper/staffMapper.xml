@@ -46,7 +46,7 @@
             <if test="staffName != null">
                 AND staff_name LIKE '%' || #{staffName}|| '%'
             </if>
-            <if test="departmentCode != ''">
+            <if test="departmentCode != null">
                 AND department_code = #{departmentCode}
             </if>
             <if test="schoolCode != null">
@@ -79,7 +79,7 @@
         SELECT * FROM staff
         <where>
             <if test="staffName != null">
-                AND staff_name LIKE '%' || #{staffName}|| '%'
+                 staff_name LIKE '%' || #{staffName}|| '%'
             </if>
             <if test="departmentCode != null">
                 AND department_code = #{departmentCode}
@@ -107,7 +107,7 @@
         </where>
     </select>
 
-    <select id="getSearchStaffList" parameterType="com.nedam.soochanProject.dto.SearchStaffSkillDto"
+    <select id="getSearchStaffListAnd" parameterType="com.nedam.soochanProject.dto.SearchStaffSkillDto"
             resultType="com.nedam.soochanProject.domain.StaffVo">
         <!--        <select id="findStaffByStaffNoAndSkillCodeList" resultMap="staffResultMap">-->
         SELECT s.*
@@ -128,13 +128,41 @@
         GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
         HAVING COUNT(DISTINCT ss.skill_code) = #{skillCount}
     </select>
+
+
+    <select id="getSearchStaffListOr" parameterType="com.nedam.soochanProject.dto.SearchStaffSkillDto"
+            resultType="com.nedam.soochanProject.domain.StaffVo">
+        SELECT s.*
+        FROM staff s
+        JOIN staff_skill ss ON s.staff_no = ss.staff_no
+        <where>
+            <if test="staffNoList != null">
+                s.staff_no IN
+                <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <foreach item="item" index="index" collection="skillCodeList" open="AND ("
+                     separator=" OR " close=")">
+                ss.skill_code = #{item}
+            </foreach>
+        </where>
+        GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
+    </select>
+
+
+
+
+
+
+
     <!--    SELECT *-->
     <!--    FROM users u-->
     <!--    INNER JOIN post p ON u.id = p.user_id-->
     <!--    WHERE p.id IN (1, 2, 3);-->
 
-    <select id="getSkillList" resultType="java.util.List">
-        SELECT skill_code, skill_name
+    <select id="getSkillList" resultType="string">
+        SELECT skill_name
         FROM code_skill
     </select>
 
@@ -153,8 +181,9 @@
     </delete>
 
     <select id="getStaffSkillList" parameterType="int" resultType="String">
-        SELECT skill_code
-        FROM staff_skill
+        SELECT ss.skill_name
+        FROM staff_skill s
+                 JOIN code_skill ss ON s.skill_code = ss.skill_code
         WHERE staff_no = #{param1}
     </select>
     <!--staffSkill삭제-->
