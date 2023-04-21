@@ -19,6 +19,8 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.util.*;
 
+import static com.nedam.soochanProject.serviceImpl.StaffServiceImpl.essentialSkills;
+
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
@@ -29,8 +31,24 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model) {
         System.out.println("페이지 들어옴");
-        //검색 기능 테스트
-//        System.out.println("검색 결과 : " + staffService.searchList("문", null, null, Collections.singletonList("JAVA"), "1991-01-01", null).toString());
+        //새로운 스킬 리스트 보여주기
+        if (essentialSkills.isEmpty()) {
+            essentialSkills.add("JAVA");
+            essentialSkills.add("JSP");
+            essentialSkills.add("ASP");
+            essentialSkills.add("PHP");
+            essentialSkills.add("DELPHI");
+        }
+        List<String> allSkillList = new ArrayList<>(staffMapper.getSkillList());
+        for (int i = 0; i < essentialSkills.size(); i++) {
+            for (int j = 0; j < allSkillList.size(); j++) {
+
+                if (allSkillList.get(j).equals(essentialSkills.get(i))) {
+                    allSkillList.remove(j);
+                }
+            }
+        }
+        model.addAttribute("newSkills", allSkillList);
         return "home/staff_search_form";
     }
 
@@ -85,8 +103,6 @@ public class HomeController {
         map.put("check", true);
         return map;
     }
-
-
 
 
     @DeleteMapping("/delete/{staffNo}")

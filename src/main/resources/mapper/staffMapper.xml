@@ -79,7 +79,7 @@
         SELECT * FROM staff
         <where>
             <if test="staffName != null">
-                 staff_name LIKE '%' || #{staffName}|| '%'
+                staff_name LIKE '%' || #{staffName}|| '%'
             </if>
             <if test="departmentCode != null">
                 AND department_code = #{departmentCode}
@@ -130,30 +130,29 @@
     </select>
 
 
-    <select id="getSearchStaffListOr" parameterType="com.nedam.soochanProject.dto.SearchStaffSkillDto"
+    <select id="getSearchStaffListOr" parameterType="com.nedam.soochanProject.dto.OrSearchDto"
             resultType="com.nedam.soochanProject.domain.StaffVo">
-        SELECT s.*
-        FROM staff s
-        JOIN staff_skill ss ON s.staff_no = ss.staff_no
-        <where>
-            <if test="staffNoList != null">
-                s.staff_no IN
-                <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
-            <foreach item="item" index="index" collection="skillCodeList" open="AND ("
-                     separator=" OR " close=")">
-                ss.skill_code = #{item}
-            </foreach>
-        </where>
-        GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
+        SELECT a.*
+        FROM staff a
+        Join staff_skill s on a.staff_no = s.staff_no
+        WHERE skill_code in
+        <foreach collection="skillCodeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+        GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
+        having count(distinct skill_code) = #{skillCountEss}
+        union
+        SELECT a.*
+        FROM staff a
+        Join staff_skill s on a.staff_no = s.staff_no
+        WHERE skill_code in
+        <foreach collection="newSkillCodeList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
+        having count(distinct skill_code) = #{skillCountNew}
     </select>
-
-
-
-
-
 
 
     <!--    SELECT *-->
@@ -207,4 +206,10 @@
         from STAFF
     </select>
 
+
+    <!--스킬 목록 가져오기 (pk랑 이름 둘다)-->
+    <select id="getSkillBoth" resultType="com.nedam.soochanProject.domain.CodeSkill">
+        select *
+        from code_skill
+    </select>
 </mapper>

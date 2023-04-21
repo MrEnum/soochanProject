@@ -1,6 +1,7 @@
 package com.nedam.soochanProject.serviceImpl;
 
 
+import com.nedam.soochanProject.domain.CodeSkill;
 import com.nedam.soochanProject.domain.StaffVo;
 import com.nedam.soochanProject.dto.*;
 import com.nedam.soochanProject.mapper.StaffMapper;
@@ -131,7 +132,16 @@ public class StaffServiceImpl implements StaffService {
                 staffList = staffMapper.getSearchStaffListAnd(new SearchStaffSkillDto(staffNoList, skillCodes));
             } else {
 //                Or
-                staffList = staffMapper.getSearchStaffListOr(new SearchStaffSkillDto(staffNoList, skillCodes));
+                List<Integer> essenList = new ArrayList<>();
+                for (int i = 0; i < skillCode.size(); i++) {
+                    for (int j = 30; j < 36; j++) {
+                        if (skillCodes.get(i) == j) {
+                            essenList.add(j);
+                            skillCodes.remove(j);
+                        }
+                    }
+                }
+                staffList = staffMapper.getSearchStaffListOr(new OrSearchDto(staffNoList, essenList, skillCodes));
             }
             //staffName List로 staffSkill조건으로 return staffVo
             System.out.println(staffList.toString());
@@ -141,23 +151,16 @@ public class StaffServiceImpl implements StaffService {
 
     private List<Integer> stringToIntskill(List<String> skillCode) {
         List<Integer> skillCodes = new ArrayList<>();
-        for (int i = 0; i < skillCode.size(); i++) {
-            if (skillCode.get(i).equals("JAVA")) {
-                skillCodes.add(31);
-            }
-            if (skillCode.get(i).equals("JSP")) {
-                skillCodes.add(32);
-            }
-            if (skillCode.get(i).equals("ASP")) {
-                skillCodes.add(33);
-            }
-            if (skillCode.get(i).equals("PHP")) {
-                skillCodes.add(34);
-            }
-            if (skillCode.get(i).equals("DELPHI")) {
-                skillCodes.add(35);
+        List<CodeSkill> codeSkills = staffMapper.getSkillBoth();
+
+        for (int i = 0; i < codeSkills.size(); i++) {
+            for (int j = 0; j < skillCode.size(); j++) {
+                if (codeSkills.get(i).getSkillName().equals(skillCode.get(j))) {
+                    skillCodes.add(codeSkills.get(i).getSkillCode());
+                }
             }
         }
+
         return skillCodes;
     }
 

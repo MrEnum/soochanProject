@@ -319,6 +319,9 @@
                 월
 
             </td>
+            <c:forEach items="${staff.newSkillCodes}" var="arr">
+                <span class="newskill" style="margin-left: 7px;" value="${arr}" onclick="deleteDiv(this)">${arr} </span>
+            </c:forEach>
         </tr>
         <tr>
             <td class="align-middle">추가기술</td>
@@ -352,7 +355,10 @@
                         <%--                        onclick="addSkill()"--%>
                     </div>
                     <div class="skill-box" id="skill-box" style="margin-top:5px;">
-
+                        <c:forEach items="${newSkills}" var="arr">
+                            <span class="newskill" style="margin-left: 7px;" value="${arr}"
+                                  onclick="deleteDiv(this)">${arr} </span>
+                        </c:forEach>
                     </div>
                 </div>
             </td>
@@ -436,7 +442,7 @@
         }
         for (var j = 0; j < skillList.length; j++) {
             console.log("스킬리스트 : " + skillList[j]);
-            if (value1 === skillList[j] || value1 ==="") {
+            if (value1 === skillList[j] || value1 === "") {
                 check += 1;
             }
         }

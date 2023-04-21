@@ -1,5 +1,6 @@
 package com.nedam.soochanProject.mapper;
 
+import com.nedam.soochanProject.domain.CodeSkill;
 import com.nedam.soochanProject.domain.StaffVo;
 import com.nedam.soochanProject.dto.*;
 import org.springframework.http.converter.json.GsonBuilderUtils;
@@ -18,7 +19,7 @@ public interface StaffMapper {
     StaffVo getDetail(int staffNo);
     //직원 검색리스트 가져오기
     List<Integer> getSearchIntegerList(SearchRequestDto searchRequestDto);//직원 스킬 외에 조건
-    List<StaffVo> getSearchStaffListOr(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
+    List<StaffVo> getSearchStaffListOr(OrSearchDto orSearchDto);//직원 스킬 조건
     List<StaffVo> getSearchStaffListAnd(SearchStaffSkillDto searchStaffSkillDto);//직원 스킬 조건
     List<StaffVo> getSearchIntegerStaffList(SearchRequestDto searchRequestDto);//직원 스킬 조건
 
@@ -43,6 +44,8 @@ public interface StaffMapper {
     //스킬과 관련된 메서드----------------------------------
     //스킬 목록 가져오기
     List<String> getSkillList();
+    //스킬 목록가져오기 codeSkill클래스 형태로
+    List<CodeSkill> getSkillBoth();
     //스킬등록
     void registerSkill(ForSkillListDto newSkillList);
 }

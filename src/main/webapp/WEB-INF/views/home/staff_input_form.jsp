@@ -1,163 +1,51 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+         pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>사원 정보 등록</title>
     <style type="text/css">
-        #inputTb{
+        #inputTb {
             width: 100%;
             margin-bottom: 10px;
         }
-        table,th,td{
-            border:1px solid black;
+
+        table, th, td {
+            border: 1px solid black;
             border-collapse: collapse;
         }
-        #cancelBtn{
+
+        #cancelBtn {
             position: relative;
-            width : 10%;
+            width: 10%;
         }
-        #submitBtn{
-            position : relative;
-            width:10%;
+
+        #submitBtn {
+            position: relative;
+            width: 10%;
         }
-        .school{
-            font-size:12px;
+
+        .school {
+            font-size: 12px;
         }
-        #btnDiv{
+
+        #btnDiv {
             text-align: right;
         }
-        th{
+
+        th {
             background-color: silver;
+        }
+
+        .newskill {
+            border: 1px solid;
+            padding: 0px 10px 1px 10px;
+            height: 10px;
         }
     </style>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(function(){
-            setDate();
 
-            $("#cancelBtn").click(function(){
-                location.href='register';
-            });
-
-            $('input[type="checkbox"][name="gender"]').click(function(){
-                if($(this).prop('checked')){
-                    $('input[type="checkbox"][name="gender"]').prop('checked',false);
-                    $(this).prop('checked',true);
-                }
-            });
-
-            $('input[type="checkbox"][name="school_code"]').click(function(){
-                if($(this).prop('checked')){
-                    $('input[type="checkbox"][name="school_code"]').prop('checked',false);
-                    $(this).prop('checked',true);
-                }
-            });
-
-            $("#submitBtn").click(function(){
-
-                var staff_name = $("#staffName").val();
-                var jumin_no = parseInt($("#jumin1").val()+$("#jumin2").val());
-                var department_code = $("#department").val();
-                var school_code = $("input:checkbox[name=school_code]:checked").val();
-                var chkarr = [];
-                $("input:checkbox[name='skill']:checked").each(function(){
-                    chkarr.push(this.value);
-                });
-
-                var fmt = RegExp(/^\d{6}[1234]\d{6}$/) ;
-
-                if(staff_name==null || staff_name==""){
-                    alert("이름은 필수사항입니다.");
-                    return false;
-                }
-
-                if(!fmt.test(jumin_no)){
-                    alert('주민등록번호를 형식에 맞춰 입력해주세요.');
-                    return false;
-                }
-                if(department_code==""){
-                    alert("부서를 선택해주세요");
-                    return false;
-                }
-
-                if(school_code==null || school_code==""){
-                    alert("학력을 선택해주세요");
-                    return false;
-                }
-                if(chkarr.length==0){
-                    alert('기술을 하나이상 선택해주세요');
-                    return false;
-                }
-                if($("#sYear").val()=="" || $("#sMonth").val()==""){
-                    alert("졸일을 선택해주세요.");
-                    return false;
-                }
-                var strList = chkarr.toString();
-                var graduate_day =($("#sYear").val()+"-"+$("#sMonth").val() + "-" + "01");
-                console.log(graduate_day);
-
-                var staffRequestDto = {
-                    staffName : staff_name,
-                    juminNo : jumin_no,
-                    departmentCode : department_code,
-                    schoolCode : school_code,
-                    graduateDay : graduate_day,
-                    skillCode : strList
-                };
-                console.log(JSON.stringify(staffRequestDto));
-                if(confirm('정말 저장 하시겠습니까?')){
-                    $.ajax({
-                        url:'/register/do',
-                        type : 'POST',
-                        data : staffRequestDto,
-                        // contentType : "application/json",
-                        // dataType:'json',
-                        success : function(msg) {
-                            if(msg.check==true) {
-                                alert("저장되었습니다.");
-                                opener.window.location.reload();
-                                close();
-                            }
-                            else{
-                                alert("저장실패");
-                            }
-                        },
-                        error:function(request,status,error){
-                            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-                        }
-
-                    });
-                }
-            });
-        });
-
-        function setDate(){
-            var dt = new Date();
-            var year = "";
-            var com_year = dt.getFullYear();
-
-            $(".year").append("<option value=''></option>");
-
-            for(var y=(com_year-30);y<=com_year;y++){
-                $(".year").append("<option value='" + y + "'>" + y + "</option>");
-            }
-
-            // ;		$(".month").append("<option value=''></option>");
-            // for (var i = 1; i <= 12; i++) {
-            //     if(i<10){
-            //         $(".month").append("<option value='" +"0"+ i + "'>" + "0"+i + "</option>");
-            //     }else{
-            //         $(".month").append("<option value='" + i + "'>" + i + "</option>");
-            //     }
-            // }
-
-        }
-
-
-
-    </script>
 </head>
 <body>
 <table id="inputTb" align="center">
@@ -174,7 +62,9 @@
         <th>이름</th>
         <td><input type="text" style="width:90%;" id="staffName"></td>
         <th>주민번호</th>
-        <td><input type="text" style="width:35%;" id="jumin1" required="required"> - <input type="password" style="width:35%;" id="jumin2"></td>
+        <td><input type="text" style="width:35%;" id="jumin1" required="required"> - <input type="password"
+                                                                                            style="width:35%;"
+                                                                                            id="jumin2"></td>
         <th>부서</th>
         <td>
             <select style="width:100%;" id="department">
@@ -217,10 +107,209 @@
             </select>월
         </td>
     </tr>
+    <tr>
+        <th class="align-middle" style="text-align: center;
+        padding: 2px 10px 2px 10px; height: 60px;">추가기술
+        </th>
+        <td colspan="5">
+            <div class="row">
+                <span class="align-self-center" style="width: 281px;">
+                    <input id="addInfoData" class="form-control" type="search" name="addInfoData" value=""
+                           aria-label="Search" style="width:260px; margin-left: 15px;">
+                </span>
+                <span>
+                    <input type="submit" class="btn btn-secondary float-right" id="add-Skill"
+                           style="margin-left: 15px; " value="추가">
+                </span>
+                <span class="skill-box" id="skill-box" style="margin-top:5px;">
+
+                </span>
+            </div>
+
+        </td>
+    </tr>
 </table>
 <div id="btnDiv">
     <button id="submitBtn">등록</button>
     <button id="cancelBtn">초기화</button>
 </div>
 </body>
+<script>
+    //skill추가
+    function addSkill() {
+        console.log("addSkill 발동");
+        let value1 = $('#addInfoData').val().toUpperCase();
+        let skillList = ["JAVA", "JSP", "ASP", "PHP", "DELPHI"];
+        console.log("value : " + value1);
+        var spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+        console.log();
+        let check = 0;
+        // spanValues 변수에 저장된 span 요소의 값을 출력
+        for (var i = 0; i < spanValues.length; i++) {
+            console.log(i + ': ' + spanValues[i].innerHTML);
+            console.log(spanValues[i].innerHTML);
+            console.log(value1);
+            if (value1 === spanValues[i].innerHTML.trim()) {
+                console.log("발동이 안되는거야?");
+                check += 1;
+            }
+        }
+        for (var j = 0; j < skillList.length; j++) {
+            console.log("스킬리스트 : " + skillList[j]);
+            if (value1 === skillList[j] || value1 === "") {
+                check += 1;
+            }
+        }
+        if (check == 0) {
+            let temphtml = '<span class="newskill" style="margin-left: 7px;" value="' + value1 + '" onclick="deleteDiv(this)" >' + value1 + ' </span>';
+            // target-div 요소 내의 모든 span 요소를 선택하여 spanValues 변수에 저장
+            $('.skill-box').append(temphtml);
+            console.log(check);
+        } else {
+            alert("이미 포함되어 있거나 비어있습니다.")
+        }
+    }
+
+    $(function () {
+        setDate();
+
+        $("#cancelBtn").click(function () {
+            location.href = 'register';
+        });
+
+        $('input[type="checkbox"][name="gender"]').click(function () {
+            if ($(this).prop('checked')) {
+                $('input[type="checkbox"][name="gender"]').prop('checked', false);
+                $(this).prop('checked', true);
+            }
+        });
+
+        $('input[type="checkbox"][name="school_code"]').click(function () {
+            if ($(this).prop('checked')) {
+                $('input[type="checkbox"][name="school_code"]').prop('checked', false);
+                $(this).prop('checked', true);
+            }
+        });
+
+        $("#submitBtn").click(function () {
+
+            var staff_name = $("#staffName").val();
+            var jumin_no = parseInt($("#jumin1").val() + $("#jumin2").val());
+            var department_code = $("#department").val();
+            var school_code = $("input:checkbox[name=school_code]:checked").val();
+            var chkarr = [];
+            $("input:checkbox[name='skill']:checked").each(function () {
+                chkarr.push(this.value);
+            });
+
+            var fmt = RegExp(/^\d{6}[1234]\d{6}$/);
+
+            if (staff_name == null || staff_name == "") {
+                alert("이름은 필수사항입니다.");
+                return false;
+            }
+
+            if (!fmt.test(jumin_no)) {
+                alert('주민등록번호를 형식에 맞춰 입력해주세요.');
+                return false;
+            }
+            if (department_code == "") {
+                alert("부서를 선택해주세요");
+                return false;
+            }
+
+            if (school_code == null || school_code == "") {
+                alert("학력을 선택해주세요");
+                return false;
+            }
+            if (chkarr.length == 0) {
+                alert('기술을 하나이상 선택해주세요');
+                return false;
+            }
+            if ($("#sYear").val() == "" || $("#sMonth").val() == "") {
+                alert("졸일을 선택해주세요.");
+                return false;
+            }
+
+            const spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+            let newSkills = "";
+            for (let i = 0; i < spanValues.length; i++) {
+                newSkills += spanValues[i].innerHTML.trim();
+                if (i !== spanValues.length - 1) {
+                    newSkills += ", ";
+                }
+            }
+            var strList = chkarr.toString() + "," + newSkills.replace(/ /g, "");
+            var graduate_day = ($("#sYear").val() + "-" + $("#sMonth").val() + "-" + "01");
+            console.log(graduate_day);
+
+
+            var staffRequestDto = {
+                staffName: staff_name,
+                juminNo: jumin_no,
+                departmentCode: department_code,
+                schoolCode: school_code,
+                graduateDay: graduate_day,
+                skillCode: strList
+            };
+            console.log(JSON.stringify(staffRequestDto));
+            if (confirm('정말 저장 하시겠습니까?')) {
+                $.ajax({
+                    url: '/register/do',
+                    type: 'POST',
+                    data: staffRequestDto,
+                    // contentType : "application/json",
+                    // dataType:'json',
+                    success: function (msg) {
+                        if (msg.check == true) {
+                            alert("저장되었습니다.");
+                            opener.window.location.reload();
+                            close();
+                        } else {
+                            alert("저장실패");
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    }
+
+                });
+            }
+        });
+    });
+
+    function setDate() {
+        var dt = new Date();
+        var year = "";
+        var com_year = dt.getFullYear();
+
+        $(".year").append("<option value=''></option>");
+
+        for (var y = (com_year - 30); y <= com_year; y++) {
+            $(".year").append("<option value='" + y + "'>" + y + "</option>");
+        }
+
+        // ;		$(".month").append("<option value=''></option>");
+        // for (var i = 1; i <= 12; i++) {
+        //     if(i<10){
+        //         $(".month").append("<option value='" +"0"+ i + "'>" + "0"+i + "</option>");
+        //     }else{
+        //         $(".month").append("<option value='" + i + "'>" + i + "</option>");
+        //     }
+        // }
+
+    }
+
+    // 추가스킬 삭제 - 클릭했을 때 해당 요소를 삭제하는 함수
+    function deleteDiv(element) {
+        element.parentNode.removeChild(element);
+    }
+
+    $("#add-Skill").click(e => {
+        console.log("스킬추가 작동");
+        e.preventDefault();
+        addSkill();
+    });
+
+</script>
 </html>
