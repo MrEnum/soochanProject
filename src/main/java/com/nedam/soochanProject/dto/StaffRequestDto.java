@@ -17,6 +17,7 @@ public class StaffRequestDto {
     private String schoolCode;
     private String graduateDay;
     private String skillCode;
+    private String newSkills;
 
     public StaffRequestDto(String staffName, String juminNo, String departmentCode, String schoolCode, String graduateDay, String skillCode){
         this.staffName = staffName;

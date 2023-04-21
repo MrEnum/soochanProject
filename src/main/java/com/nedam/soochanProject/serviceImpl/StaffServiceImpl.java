@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service("StaffServiceImpl")
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StaffServiceImpl implements StaffService {
     public static List<String> skillList = new ArrayList<>();
+    public static List<String> essentialSkills = new ArrayList<>();
 
     @Autowired
     private StaffMapper staffMapper;
@@ -61,9 +63,11 @@ public class StaffServiceImpl implements StaffService {
         //문자열 리스트화
         String[] skillToken = staffRequestDto.getSkillCode().split(",");
         skillLists.addAll(List.of(skillToken));
+        System.out.println(Arrays.toString(skillToken));
         //업데이트 (지우고 -> 다시 저장)
         staffMapper.updateStaff(updateRequestDto);
         staffMapper.deleteStaffSkills(staffNo);
+        System.out.println("저장하기 직전 skillList : " + skillLists.toString());
         staffMapper.registerStaffSkill(new InserStaffSkillDto(staffNo, staffRequestDto.getStaffName(), skillLists));
         System.out.println("success update");
     }
@@ -71,7 +75,27 @@ public class StaffServiceImpl implements StaffService {
     //상세조회
     @Override
     public GetDetailResponseDto getDetail(int staffNo) {
-        GetDetailResponseDto dto = new GetDetailResponseDto(staffMapper.getDetail(staffNo), staffMapper.getStaffSkillList(staffNo));
+        if (essentialSkills.isEmpty()) {
+            essentialSkills.add("JAVA");
+            essentialSkills.add("JSP");
+            essentialSkills.add("ASP");
+            essentialSkills.add("PHP");
+            essentialSkills.add("DELPHI");
+        }
+        System.out.println("skillList : " + essentialSkills.toString());
+        List<String> newStaffSkill = staffMapper.getStaffSkillList(staffNo);//전부 가지고 있는 상태에서
+        List<String> staffSkill = new ArrayList<>();
+        for (String essentialSkill : essentialSkills) {
+            for (int j = 0; j < newStaffSkill.size(); j++) {
+                if (essentialSkill.equals(newStaffSkill.get(j))) {
+                    System.out.println("돌아가긴해요 essetionSkills : " + essentialSkill);
+                    staffSkill.add(essentialSkill);
+                    newStaffSkill.remove(newStaffSkill.get(j));
+
+                }
+            }
+        }
+        GetDetailResponseDto dto = new GetDetailResponseDto(staffMapper.getDetail(staffNo), staffSkill, newStaffSkill);
         return dto;//dto
     }
 
@@ -105,9 +129,9 @@ public class StaffServiceImpl implements StaffService {
             if (andOr.equals("and")) {
                 //And
                 staffList = staffMapper.getSearchStaffListAnd(new SearchStaffSkillDto(staffNoList, skillCodes));
-            }else {
+            } else {
 //                Or
-                 staffList = staffMapper.getSearchStaffListOr(new SearchStaffSkillDto(staffNoList, skillCodes));
+                staffList = staffMapper.getSearchStaffListOr(new SearchStaffSkillDto(staffNoList, skillCodes));
             }
             //staffName List로 staffSkill조건으로 return staffVo
             System.out.println(staffList.toString());

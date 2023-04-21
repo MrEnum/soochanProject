@@ -324,10 +324,10 @@
             <td class="align-middle">추가기술</td>
             <td colspan="5">
                 <div class="row">
-                    <div class="align-self-center">
+                    <span class="align-self-center">
                         <input id="addInfoData" class="form-control" type="search" name="addInfoData" value=""
                                aria-label="Search" style="width:260px; margin-left: 15px;">
-                    </div>
+                    </span>
                     <div class="row">
                         <div class="gender-check" style="margin-left: 30px;">
                             <input class="form-check-input" type="radio" value="or" id="OR" name="add_info_type">
@@ -686,7 +686,7 @@
 
     }
 
-    // target-div를 클릭했을 때 해당 요소를 삭제하는 함수
+    // newskill을 클릭했을 때 해당 요소를 삭제하는 함수
     function deleteDiv(element) {
         element.parentNode.removeChild(element);
     }
