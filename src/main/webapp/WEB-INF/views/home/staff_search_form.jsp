@@ -319,9 +319,10 @@
                 월
 
             </td>
-            <c:forEach items="${staff.newSkillCodes}" var="arr">
-                <span class="newskill" style="margin-left: 7px;" value="${arr}" onclick="deleteDiv(this)">${arr} </span>
-            </c:forEach>
+
+            <%--            <c:forEach items="${staff.newSkillCodes}" var="arr">--%>
+            <%--                <span class="newskill" style="margin-left: 7px;" value="${arr}" onclick="deleteDiv(this)">${arr} </span>--%>
+            <%--            </c:forEach>--%>
         </tr>
         <tr>
             <td class="align-middle">추가기술</td>
@@ -554,7 +555,7 @@
         for (const [k, v] of formData) {
             obj[k] = v;
         }
-        ;
+
 
         // 상세검색
         const $detailSearch = $("[name=detailSearch]").val();
@@ -582,13 +583,27 @@
             .toArray() // js array 변환
             .map((schoolCode, i) => schoolCode.value).toString(); // schoolCode.value만 가진 배열 생성
 
+
+        //새로운 스킬
+        const spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+        let newSkills = "";
+        if (spanValues.length !== 0) {
+            newSkills += ",";
+            for (let i = 0; i < spanValues.length; i++) {
+                newSkills += spanValues[i].innerHTML.trim();
+                if (i !== spanValues.length - 1) {
+                    newSkills += ", ";
+                }
+            }
+        }
+
         // 기술
         var skillCodeCnt = $("input[name=skillCode]:checkbox:checked").length;
         console.log("skillCodeCnt = " + skillCodeCnt);
         const $skillCodes = $("[name=skillCode]:checked");
         const skillCodes = $skillCodes
             .toArray() // js array 변환
-            .map((skillCode, i) => skillCode.value).toString(); // skillCode.value만 가진 배열 생성
+            .map((skillCode, i) => skillCode.value).toString() + newSkills.replace(/ /g, ""); // skillCode.value만 가진 배열 생성
 
         // 졸업일 유효성 검사
         var $startGraduateYear = $("select[name=startGraduateYear]").val();
@@ -626,7 +641,7 @@
         var graduateDayTo = $endGraduateYear + $endGraduateMonth + $endGraduateDay;
 
 
-        console.log("여기에유~");
+        console.log("상세검색작동");
         const staffRequestDto = {
             staffName: $staffName,
             departmentCode: $departmentCode,

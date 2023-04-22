@@ -47,6 +47,7 @@ public class StaffServiceImpl implements StaffService {
         StaffVo staffVo = new StaffVo(staffRequestDto.getStaffName(), staffRequestDto.getJuminNo(), staffRequestDto.getSchoolCode(), staffRequestDto.getDepartmentCode(), staffRequestDto.getGraduateDay());
         staffMapper.register(staffVo);
         checkSkill(skillLists);
+        System.out.println("등록전에 skillLists : " + skillLists);
         staffMapper.registerStaffSkill(new InserStaffSkillDto(staffName, skillLists));
 
         System.out.println("success register");
@@ -64,6 +65,7 @@ public class StaffServiceImpl implements StaffService {
         //문자열 리스트화
         String[] skillToken = staffRequestDto.getSkillCode().split(",");
         skillLists.addAll(List.of(skillToken));
+        checkSkill(skillLists);
         System.out.println(Arrays.toString(skillToken));
         //업데이트 (지우고 -> 다시 저장)
         staffMapper.updateStaff(updateRequestDto);
@@ -111,7 +113,7 @@ public class StaffServiceImpl implements StaffService {
         String c = (departmentCode.trim().equals("")) ? null : departmentCode;
         String d = (staffName.trim().equals("")) ? null : staffName;
 
-        if (b == null) {
+        if (b == null && andOr.equals("and")) {
             System.out.println("skillcode 값이 없을 때");
 
             List<StaffVo> staffList = staffMapper.getSearchIntegerStaffList(new SearchRequestDto(d, c, a, null, startGraduateDay, endGraduateDay, null, null));
@@ -123,7 +125,6 @@ public class StaffServiceImpl implements StaffService {
             System.out.println(skillCodes.toString());
             //검색 조건으로 staffName List 조회
             List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(d, c, a, null, startGraduateDay, endGraduateDay, null, null));
-//            staffNoList.addAll(List.of(121,122,123,124,125,126,127,128,129,130));
 
             System.out.println("staffNoList : " + staffNoList.toString());
             List<StaffVo> staffList;
@@ -133,15 +134,24 @@ public class StaffServiceImpl implements StaffService {
             } else {
 //                Or
                 List<Integer> essenList = new ArrayList<>();
-                for (int i = 0; i < skillCode.size(); i++) {
-                    for (int j = 30; j < 36; j++) {
-                        if (skillCodes.get(i) == j) {
-                            essenList.add(j);
-                            skillCodes.remove(j);
+                List<Integer> skills = new ArrayList<>();
+                skills.addAll(skillCodes);
+                for (int i = skillCodes.size() - 1; i > -1; i--) {
+                    for (int j = 5; j > 0; j--) {
+                        if (!skillCodes.isEmpty()) {
+                            if (skillCodes.get(i) == j) {
+                                essenList.add(j);
+                                System.out.println("essneList에 들어간 값 : " + j);
+                                System.out.println("skills에서 지워진값 : " + skills.get(i));
+                                skills.remove(i);
+                                System.out.println();
+
+                            }
                         }
                     }
                 }
-                staffList = staffMapper.getSearchStaffListOr(new OrSearchDto(staffNoList, essenList, skillCodes));
+                System.out.println(essenList.size() + "------" + skills.size());
+                staffList = staffMapper.getSearchStaffListOr(new OrSearchDto(staffNoList, essenList, skills));
             }
             //staffName List로 staffSkill조건으로 return staffVo
             System.out.println(staffList.toString());
@@ -151,8 +161,9 @@ public class StaffServiceImpl implements StaffService {
 
     private List<Integer> stringToIntskill(List<String> skillCode) {
         List<Integer> skillCodes = new ArrayList<>();
-        List<CodeSkill> codeSkills = staffMapper.getSkillBoth();
-
+        List<CodeSkill> codeSkills = staffMapper.getSkillBoth();//데이터베이스에서 가져온 스킬
+        System.out.println(codeSkills.toString());
+        System.out.println(skillCode.toString());
         for (int i = 0; i < codeSkills.size(); i++) {
             for (int j = 0; j < skillCode.size(); j++) {
                 if (codeSkills.get(i).getSkillName().equals(skillCode.get(j))) {
@@ -160,7 +171,7 @@ public class StaffServiceImpl implements StaffService {
                 }
             }
         }
-
+        System.out.println("skillCodes : " + skillCodes.toString());
         return skillCodes;
     }
 
@@ -175,12 +186,15 @@ public class StaffServiceImpl implements StaffService {
     //기존 스킬 외의 기술 체크 후 신규 저장
     public void checkSkill(List<String> skillCode) {
 //        System.out.println(staffMapper.getSkillList());
+        if (essentialSkills.isEmpty()) {
+            essentialSkills.add("JAVA");
+            essentialSkills.add("JSP");
+            essentialSkills.add("ASP");
+            essentialSkills.add("PHP");
+            essentialSkills.add("DELPHI");
+        }
         if (skillList.isEmpty()) {
-//            skillList.add("JAVA");
-//            skillList.add("JSP");
-//            skillList.add("ASP");
-//            skillList.add("PHP");
-//            skillList.add("DELPHI");
+            System.out.println("스태틱리스트 들어옴");
             skillList.addAll(staffMapper.getSkillList());
         }
         System.out.println("스태틱리스트 : " + skillList.toString());
@@ -198,12 +212,14 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         System.out.println("리퀘스트리스트 : " + newSkillCode);
+        List<String> newSkillCodes = new ArrayList<>();
         try {
             if (!newSkillCode.isEmpty()) {
                 //신규 스킬 등록
                 skillList.addAll(newSkillCode);
-                System.out.println("2 newSkillcode : " + newSkillCode);
-                staffMapper.registerSkill(new ForSkillListDto(newSkillCode));
+                newSkillCodes.addAll(newSkillCode);
+                System.out.println("2 newSkillcode : " + newSkillCodes);
+                staffMapper.registerSkill(new ForSkillListDto(newSkillCodes));
             }
         } catch (Exception e) {
             e.printStackTrace();

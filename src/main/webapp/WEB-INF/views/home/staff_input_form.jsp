@@ -233,13 +233,16 @@
 
             const spanValues = document.getElementById("skill-box").getElementsByTagName("span");
             let newSkills = "";
-            for (let i = 0; i < spanValues.length; i++) {
-                newSkills += spanValues[i].innerHTML.trim();
-                if (i !== spanValues.length - 1) {
-                    newSkills += ", ";
+            if (spanValues.length !== 0) {
+                newSkills += ",";
+                for (let i = 0; i < spanValues.length; i++) {
+                    newSkills += spanValues[i].innerHTML.trim();
+                    if (i !== spanValues.length - 1) {
+                        newSkills += ", ";
+                    }
                 }
             }
-            var strList = chkarr.toString() + "," + newSkills.replace(/ /g, "");
+            var strList = chkarr.toString() +  newSkills.replace(/ /g, "");
             var graduate_day = ($("#sYear").val() + "-" + $("#sMonth").val() + "-" + "01");
             console.log(graduate_day);
 

@@ -132,26 +132,32 @@
 
     <select id="getSearchStaffListOr" parameterType="com.nedam.soochanProject.dto.OrSearchDto"
             resultType="com.nedam.soochanProject.domain.StaffVo">
-        SELECT a.*
-        FROM staff a
-        Join staff_skill s on a.staff_no = s.staff_no
-        WHERE skill_code in
-        <foreach collection="skillCodeList" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <if test="skillCountEss != 0">
+            SELECT a.*
+            FROM staff a
+            Join staff_skill s on a.staff_no = s.staff_no
+            WHERE skill_code in
+            <foreach collection="skillCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
+            having count(distinct skill_code) = #{skillCountEss}
+            <if test="skillCountNew != 0 and skillCountEss != 0">
+                union
+            </if>
+        </if>
 
-        GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
-        having count(distinct skill_code) = #{skillCountEss}
-        union
-        SELECT a.*
-        FROM staff a
-        Join staff_skill s on a.staff_no = s.staff_no
-        WHERE skill_code in
-        <foreach collection="newSkillCodeList" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
-        having count(distinct skill_code) = #{skillCountNew}
+        <if test="skillCountNew != 0">
+            SELECT a.*
+            FROM staff a
+            Join staff_skill s on a.staff_no = s.staff_no
+            WHERE skill_code in
+            <foreach collection="newSkillCodeList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
+            having count(distinct skill_code) = #{skillCountNew}
+        </if>
     </select>
 
 
@@ -166,10 +172,13 @@
     </select>
 
     <insert id="registerSkill" parameterType="com.nedam.soochanProject.dto.ForSkillListDto">
-        <foreach collection="skillList" item="skillName">
-            INSERT INTO code_skill(skill_code, skill_name)
-            VALUES(code_skill_seq.nextval, #{skillName})
+        INSERT ALL
+        <foreach collection="newSkillList" item="skillName" index="index" separator=" ">
+
+            INTO code_skill(skill_code, skill_name)
+            VALUES(get_skill_seq, #{skillName})
         </foreach>
+        SELECT * FROM DUAL
     </insert>
 
     <!--삭제-->

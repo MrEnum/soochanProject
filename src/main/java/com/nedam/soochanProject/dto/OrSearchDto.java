@@ -20,5 +20,7 @@ public class OrSearchDto {
         this.newSkillCodeList =newSkillCodeList;
         this.skillCountEss = skillCodeList.size();
         this.skillCountNew = newSkillCodeList.size();
+
+        System.out.println(skillCodeList.size() + "-----" +newSkillCodeList.size());
     }
 }

@@ -261,10 +261,13 @@
 
             const spanValues = document.getElementById("skill-box").getElementsByTagName("span");
             let newSkills = "";
-            for (let i = 0; i < spanValues.length; i++) {
-                newSkills += spanValues[i].innerHTML.trim();
-                if (i !== spanValues.length-1) {
-                    newSkills += ", ";
+            if (spanValues.length !== 0) {
+                newSkills += ",";
+                for (let i = 0; i < spanValues.length; i++) {
+                    newSkills += spanValues[i].innerHTML.trim();
+                    if (i !== spanValues.length - 1) {
+                        newSkills += ", ";
+                    }
                 }
             }
 
@@ -276,7 +279,7 @@
             console.log("graduateDay" + graduate_day);
 
             console.log("staffNo" + staff_no);
-            var skillString = chkarr.toString()+"," + newSkills.replace(/ /g, "");
+            var skillString = chkarr.toString() + newSkills.replace(/ /g, "");
             console.log("skillCode" + skillString);
 
             var staffRequestDto = {
