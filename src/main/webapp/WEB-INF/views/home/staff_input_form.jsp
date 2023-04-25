@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -128,6 +131,15 @@
 
         </td>
     </tr>
+    <tr>
+        <th class="align-middle">추가기술 목록</th>
+        <td colspan="5">
+            <c:forEach items="${newSkills}" var="arr">
+                            <span class="newskill-list" id="a${arr}" style="margin-left: 7px;" value="${arr}"
+                                  onclick="addDiv(this)">${arr}</span>
+            </c:forEach>
+        </td>
+    </tr>
 </table>
 <div id="btnDiv">
     <button id="submitBtn">등록</button>
@@ -135,6 +147,42 @@
 </div>
 </body>
 <script>
+
+    function addDiv(obj) {
+        let value1 = obj.id.replace("a", "");
+        let skillList = ["JAVA", "JSP", "ASP", "PHP", "DELPHI"];
+        console.log("value : " + value1);
+        var spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+        console.log();
+        let check = 0;
+        // spanValues 변수에 저장된 span 요소의 값을 출력
+        for (var i = 0; i < spanValues.length; i++) {
+            console.log(i + ': ' + spanValues[i].innerHTML);
+            console.log(spanValues[i].innerHTML);
+            console.log(value1);
+            if (value1 === spanValues[i].innerHTML.trim()) {
+                console.log("발동이 안되는거야?");
+                check += 1;
+            }
+        }
+        for (var j = 0; j < skillList.length; j++) {
+            console.log("스킬리스트 : " + skillList[j]);
+            if (value1 === skillList[j] || value1 === "") {
+                check += 1;
+            }
+        }
+        if (check == 0) {
+            let temphtml = '<span class="newskill" style="margin-left: 7px;" value="' + value1 + '" onclick="deleteDiv(this)" >' + value1 + ' </span>';
+
+            // target-div 요소 내의 모든 span 요소를 선택하여 spanValues 변수에 저장
+
+            $('.skill-box').append(temphtml);
+            console.log(check);
+        } else {
+            alert("이미 포함되어 있거나 비어있습니다.")
+        }
+    }
+
     //skill추가
     function addSkill() {
         console.log("addSkill 발동");
@@ -242,7 +290,7 @@
                     }
                 }
             }
-            var strList = chkarr.toString() +  newSkills.replace(/ /g, "");
+            var strList = chkarr.toString() + newSkills.replace(/ /g, "");
             var graduate_day = ($("#sYear").val() + "-" + $("#sMonth").val() + "-" + "01");
             console.log(graduate_day);
 

@@ -1,4 +1,4 @@
-package com.nedam.soochanProject.dto;
+package com.nedam.soochanProject.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

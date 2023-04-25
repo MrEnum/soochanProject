@@ -16,14 +16,16 @@ public class StaffVo {
     private int staffNo;
     private String staffName;
     private String juminNo;
+    private String gender;
     private String schoolCode;
     private String departmentCode;
     private String graduateDay;
 
 
-    public StaffVo(String staffName, String juminNo, String schoolCode, String departmentCode, String  graduateDay) {
+    public StaffVo(String staffName, String juminNo, String  gender, String schoolCode, String departmentCode, String  graduateDay) {
         this.staffName = staffName;
         this.juminNo = juminNo;
+        this.gender = gender;
         this.schoolCode = schoolCode;
         this.departmentCode = departmentCode;
         this.graduateDay = graduateDay;

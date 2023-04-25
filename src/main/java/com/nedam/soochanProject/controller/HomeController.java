@@ -1,25 +1,21 @@
 package com.nedam.soochanProject.controller;
 
-import com.nedam.soochanProject.domain.StaffVo;
-import com.nedam.soochanProject.dto.GetDetailResponseDto;
-import com.nedam.soochanProject.dto.SearchRequestDto;
-import com.nedam.soochanProject.dto.StaffRequestDto;
+import com.nedam.soochanProject.dto.response.GetDetailResponseDto;
+import com.nedam.soochanProject.dto.request.StaffRequestDto;
 import com.nedam.soochanProject.mapper.StaffMapper;
 import com.nedam.soochanProject.service.StaffService;
 import com.nedam.soochanProject.serviceImpl.StaffServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.time.Month;
-import java.time.YearMonth;
+
 import java.util.*;
 
 import static com.nedam.soochanProject.serviceImpl.StaffServiceImpl.essentialSkills;
+import static com.nedam.soochanProject.serviceImpl.StaffServiceImpl.skillList;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,13 +28,7 @@ public class HomeController {
     public String home(Model model) {
         System.out.println("페이지 들어옴");
         //새로운 스킬 리스트 보여주기
-        if (essentialSkills.isEmpty()) {
-            essentialSkills.add("JAVA");
-            essentialSkills.add("JSP");
-            essentialSkills.add("ASP");
-            essentialSkills.add("PHP");
-            essentialSkills.add("DELPHI");
-        }
+        staffServiceImpl.addEssentialSkills();
         List<String> allSkillList = new ArrayList<>(staffMapper.getSkillList());
         for (int i = 0; i < essentialSkills.size(); i++) {
             for (int j = 0; j < allSkillList.size(); j++) {
@@ -48,6 +38,7 @@ public class HomeController {
                 }
             }
         }
+
         model.addAttribute("newSkills", allSkillList);
         return "home/staff_search_form";
     }
@@ -55,6 +46,18 @@ public class HomeController {
 
     @GetMapping("/register")
     public String inputPage(Model model) {
+        staffServiceImpl.addEssentialSkills();
+        List<String> allSkillList = new ArrayList<>(staffMapper.getSkillList());
+        for (int i = 0; i < essentialSkills.size(); i++) {
+            for (int j = 0; j < allSkillList.size(); j++) {
+
+                if (allSkillList.get(j).equals(essentialSkills.get(i))) {
+                    allSkillList.remove(j);
+                }
+            }
+        }
+        System.out.println(allSkillList);
+        model.addAttribute("newSkills", allSkillList);
 
         return "home/staff_input_form";
     }
@@ -80,6 +83,17 @@ public class HomeController {
         int month = Integer.parseInt(splitStr[1]);
         System.out.println(year + " " + month);
         Date date = new Date(year - 1900, month - 1, 1);
+        List<String> allSkillList = new ArrayList<>(staffMapper.getSkillList());
+        for (int i = 0; i < essentialSkills.size(); i++) {
+            for (int j = 0; j < allSkillList.size(); j++) {
+
+                if (allSkillList.get(j).equals(essentialSkills.get(i))) {
+                    allSkillList.remove(j);
+                }
+            }
+        }
+        System.out.println(allSkillList);
+        model.addAttribute("newSkills", allSkillList);
 
         //Date타입에서 자바스크립트단에 맞게 바꿔서 문자열로 보내주기
         System.out.println(staffService.getDetail(staffNo));

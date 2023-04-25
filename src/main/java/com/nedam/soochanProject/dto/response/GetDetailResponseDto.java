@@ -1,4 +1,4 @@
-package com.nedam.soochanProject.dto;
+package com.nedam.soochanProject.dto.response;
 
 import com.nedam.soochanProject.domain.StaffVo;
 import lombok.Data;

@@ -149,6 +149,11 @@
         padding: 10px;
     }
 
+    .newskill-list {
+        float: left;
+        padding: 4px;
+    }
+
 </style>
 
 <form id="searchStaffFrm" name="searchStaffFrm">
@@ -167,24 +172,24 @@
                            aria-label="Search">
                 </div>
             </td>
-            <%--			<td class="align-middle">성별</td>--%>
-            <%--			<td>--%>
-            <%--				<div class="row">--%>
-            <%--					<div class="gender-check" style="margin-left: 30px;">--%>
-            <%--						<input class="form-check-input" type="checkbox" value="M" id="gender_M" name="gender">--%>
-            <%--						<label class="form-check-label" for="flexCheckDefault">--%>
-            <%--							남--%>
-            <%--						</label>--%>
-            <%--					</div>--%>
-            <%--					&nbsp;--%>
-            <%--					<div class="gender-check">--%>
-            <%--						<input class="form-check-input" type="checkbox" value="W" id="gender_F" name="gender">--%>
-            <%--						<label class="form-check-label" for="flexCheckChecked">--%>
-            <%--							여--%>
-            <%--						</label>--%>
-            <%--					</div>--%>
-            <%--				</div>--%>
-            <%--			</td>--%>
+            <td class="align-middle">성별</td>
+            <td>
+                <div class="row">
+                    <div class="gender-check" style="margin-left: 30px;">
+                        <input class="form-check-input" type="checkbox" value="M" id="gender_M" name="gender">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            남
+                        </label>
+                    </div>
+                    &nbsp;
+                    <div class="gender-check">
+                        <input class="form-check-input" type="checkbox" value="F" id="gender_F" name="gender">
+                        <label class="form-check-label" for="flexCheckChecked">
+                            여
+                        </label>
+                    </div>
+                </div>
+            </td>
             <td class="align-middle">부서</td>
             <td class="align-middle">
                 <div class="department-check">
@@ -304,7 +309,7 @@
 
                 <select name="endGraduateYear">
                     <option value=""></option>
-                    <%for (int i = 1981; i <= 2000; i++) { %>
+                    <%for (int i = 1981; i <= 2023; i++) { %>
                     <option value="<%=i%>"><%=i%>
                     </option>
                     <%} %>
@@ -356,12 +361,18 @@
                         <%--                        onclick="addSkill()"--%>
                     </div>
                     <div class="skill-box" id="skill-box" style="margin-top:5px;">
-                        <c:forEach items="${newSkills}" var="arr">
-                            <span class="newskill" style="margin-left: 7px;" value="${arr}"
-                                  onclick="deleteDiv(this)">${arr} </span>
-                        </c:forEach>
+
                     </div>
                 </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="align-middle">추가기술 목록</td>
+            <td colspan="5">
+                <c:forEach items="${newSkills}" var="arr">
+                            <span class="newskill-list" id="a${arr}" style="margin-left: 7px;" value="${arr}"
+                                  onclick="addDiv(this)">${arr}</span>
+                </c:forEach>
             </td>
         </tr>
         </tbody>
@@ -422,9 +433,42 @@
 <script>
     let skillNum = 5;
 
+    function addDiv(obj) {
+        let value1 = obj.id.replace("a", "");
+        let skillList = ["JAVA", "JSP", "ASP", "PHP", "DELPHI"];
+        console.log("value : " + value1);
+        var spanValues = document.getElementById("skill-box").getElementsByTagName("span");
+        console.log();
+        let check = 0;
+        // spanValues 변수에 저장된 span 요소의 값을 출력
+        for (var i = 0; i < spanValues.length; i++) {
+            console.log(i + ': ' + spanValues[i].innerHTML);
+            console.log(spanValues[i].innerHTML);
+            console.log(value1);
+            if (value1 === spanValues[i].innerHTML.trim()) {
+                console.log("발동이 안되는거야?");
+                check += 1;
+            }
+        }
+        for (var j = 0; j < skillList.length; j++) {
+            console.log("스킬리스트 : " + skillList[j]);
+            if (value1 === skillList[j] || value1 === "") {
+                check += 1;
+            }
+        }
+        if (check == 0) {
+            let temphtml = '<span class="newskill" style="margin-left: 7px;" value="' + value1 + '" onclick="deleteDiv(this)" >' + value1 + ' </span>';
+
+            // target-div 요소 내의 모든 span 요소를 선택하여 spanValues 변수에 저장
+
+            $('.skill-box').append(temphtml);
+            console.log(check);
+        } else {
+            alert("이미 포함되어 있거나 비어있습니다.")
+        }
+    }
+
     function addSkill() {
-
-
         let value1 = $('#addInfoData').val().toUpperCase();
         let skillList = ["JAVA", "JSP", "ASP", "PHP", "DELPHI"];
         console.log("value : " + value1);
@@ -457,6 +501,7 @@
         } else {
             alert("이미 포함되어 있거나 비어있습니다.")
         }
+        $('#addInfoData').val("");
     }
 
 
@@ -571,6 +616,10 @@
         const $staffName = $("[name=staffName]").val();
         console.log("staffName = " + $staffName);
 
+        //성별
+        var genderCodeCnt = $("input[name=gender]:checkbox:checked").length;
+        const $genderCodes = $("[name=gender]:checked").toArray().map((gender, i) => gender.value).toString();
+        const genderCodes = genderCodeCnt > 1 ? null : $genderCodes;
         // 부서
         const $departmentCode = $("select[name=departmentCode]").val();
         console.log("departmentCode = " + $departmentCode);
@@ -613,27 +662,27 @@
         var $endGraduateMonth = $("select[name=endGraduateMonth]").val();
         var $endGraduateDay = $("select[name=endGraduateDay]").val();
 
-        if ($startGraduateYear > $endGraduateYear) {
-            alert("졸업일을 정확이 입력해주세요.");
-            return false;
-        }
 
-        if ($startGraduateMonth != "" && $endGraduateMonth != "") {
-            // for문으로 변경해 볼 수 있다.
+        // for문으로 변경해 볼 수 있다.
+        if ($startGraduateMonth != "") {
             if ($startGraduateMonth < 10) {
-                $startGraduateMonth = '0' + $startGraduateMonth;
+                $startGraduateMonth = $startGraduateMonth;
                 $startGraduateDay = '01';
             }
+
+        } else {
+            $startGraduateYear = "";
+            $startGraduateMonth = "";
+            $startGraduateDay = "";
+        }
+        if ($endGraduateMonth != "") {
             if ($endGraduateMonth < 10) {
                 $endGraduateMonth = '0' + $endGraduateMonth;
                 $endGraduateDay = '01';
             }
         } else {
-            $startGraduateYear = "";
             $endGraduateYear = "";
-            $startGraduateMonth = "";
             $endGraduateMonth = "";
-            $startGraduateDay = "";
             $endGraduateDay = "";
         }
 
@@ -644,6 +693,7 @@
         console.log("상세검색작동");
         const staffRequestDto = {
             staffName: $staffName,
+            gender : genderCodes,
             departmentCode: $departmentCode,
             schoolCodes: schoolCodes,
             startGraduateDay: graduateDayFrom,

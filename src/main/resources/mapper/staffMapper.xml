@@ -3,14 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nedam.soochanProject.mapper.StaffMapper">
-    <select id="getStaffList" resultType="com.nedam.soochanProject.domain.StaffVo">
-        SELECT *
-        FROM STAFF
-    </select>
+
     <!--사원등록-->
     <insert id="register" parameterType="com.nedam.soochanProject.domain.StaffVo">
-        INSERT INTO STAFF(staff_no, staff_name, jumin_no, school_code, department_code, graduate_day)
-        VALUES (STAFF_SEQUENCE.NEXTVAL, #{staffName}, #{juminNo},
+        INSERT INTO STAFF(staff_no, staff_gender, staff_name, jumin_no, school_code, department_code, graduate_day)
+        VALUES (STAFF_SEQUENCE.NEXTVAL, #{gender}, #{staffName}, #{juminNo},
                 #{schoolCode},
                 #{departmentCode},
                 #{graduateDay})
@@ -39,12 +36,15 @@
     </select>
 
     <!--검색쿼리-->
-    <select id="getSearchIntegerList" parameterType="com.nedam.soochanProject.dto.SearchRequestDto"
+    <select id="getSearchIntegerList" parameterType="com.nedam.soochanProject.dto.request.SearchRequestDto"
             resultType="_int">
         SELECT staff_no FROM staff
         <where>
             <if test="staffName != null">
                 AND staff_name LIKE '%' || #{staffName}|| '%'
+            </if>
+            <if test="gender != null">
+                AND staff_gender = #{gender}
             </if>
             <if test="departmentCode != null">
                 AND department_code = #{departmentCode}
@@ -81,6 +81,9 @@
             <if test="staffName != null">
                 staff_name LIKE '%' || #{staffName}|| '%'
             </if>
+            <if test="gender != null">
+                AND staff_gender = #{gender}
+            </if>
             <if test="departmentCode != null">
                 AND department_code = #{departmentCode}
             </if>
@@ -91,15 +94,15 @@
             </if>
             <if test="startGraduateDay != null or endGraduateDay != null ">
                 AND graduate_day
-                <if test="endGraduateDay == null and startGraduateDay != null">
+                <if test="startGraduateDay != null and endGraduateDay == null">
                     between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
                     AND to_date('9999-12-31', 'YYYY-MM-DD')
                 </if>
-                <if test="endGraduateDay != null and startGraduateDay ==null">
-                    between to_date('0001-01-01', 'YYYY-MM-DD')
+                <if test="startGraduateDay == null and endGraduateDay != null">
+                    between to_date('1001-01-01', 'YYYY-MM-DD')
                     AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
                 </if>
-                <if test="endGraduateDay != null and startGraduateDay !=null">
+                <if test="startGraduateDay !=null and endGraduateDay != null">
                     between to_date(#{startGraduateDay}, 'YYYY-MM-DD')
                     AND to_date(#{endGraduateDay}, 'YYYY-MM-DD')
                 </if>
@@ -125,7 +128,7 @@
                 #{item}
             </foreach>
         </where>
-        GROUP BY s.staff_no, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
+        GROUP BY s.staff_no,s.staff_gender, s.staff_name, s.jumin_no, s.school_code, s.department_code, s.graduate_day
         HAVING COUNT(DISTINCT ss.skill_code) = #{skillCount}
     </select>
 
@@ -202,7 +205,7 @@
 
     </delete>
 
-    <update id="updateStaff" parameterType="com.nedam.soochanProject.dto.UpdateRequestDto">
+    <update id="updateStaff" parameterType="com.nedam.soochanProject.dto.request.UpdateRequestDto">
         UPDATE staff
         SET jumin_no        = #{juminNo},
             school_code     = #{schoolCode},
