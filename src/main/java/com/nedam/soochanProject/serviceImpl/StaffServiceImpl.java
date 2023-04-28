@@ -110,33 +110,46 @@ public class StaffServiceImpl implements StaffService {
             List<Integer> staffNoList = staffMapper.getSearchIntegerList(new SearchRequestDto(d, e, c, a, null, startGraduateDay, endGraduateDay, null, null));
             List<StaffVo> staffList;
             System.out.println("스킬 코드가  null이 아니고 and 조건일 때 : " + b);
-            if (andOr.equals("and")) {
-                //And
-                staffList = staffMapper.getSearchStaffListAnd(new SearchStaffSkillDto(staffNoList, skillCodes));
-            } else {
-                System.out.println("스킬 코드가  null이 아니고 or 조건일 때 : " + b);
+            System.out.println("staffNoList : " + staffNoList.toString());
+            if (!staffNoList.isEmpty()) {
+                if (andOr.equals("and")) {
+                    //And
+                    staffList = staffMapper.getSearchStaffListAnd(new SearchStaffSkillDto(staffNoList, skillCodes));
+                } else {
+                    System.out.println("스킬 코드가  null이 아니고 or 조건일 때 : " + b);
 //                Or
-                List<Integer> essenList = new ArrayList<>();
-                List<Integer> skills = new ArrayList<>();
-                skills.addAll(skillCodes);
-                for (int i = skillCodes.size() - 1; i > -1; i--) {
-                    for (int j = 5; j > 0; j--) {
-                        if (!skillCodes.isEmpty()) {
-                            if (skillCodes.get(i) == j) {
-                                essenList.add(j);
-                                skills.remove(i);
+                    List<Integer> essenList = new ArrayList<>();
+                    List<Integer> skills = new ArrayList<>();
+                    skills.addAll(skillCodes);
+                    //필수 스킬과 추가 스킬을 나누는 작업
+                    for (int i = skillCodes.size() - 1; i > -1; i--) {
+                        for (int j = 5; j > 0; j--) {
+                            if (!skillCodes.isEmpty()) {
+                                if (skillCodes.get(i) == j) {
+                                    essenList.add(j);
+                                    skills.remove(i);
 
+                                }
                             }
                         }
                     }
+                    staffList = staffMapper.getSearchStaffListOr(new OrSearchDto(staffNoList, essenList, skills));
                 }
-                staffList = staffMapper.getSearchStaffListOr(new OrSearchDto(staffNoList, essenList, skills));
+            } else {
+                staffList = null;
             }
-            //staffName List로 staffSkill조건으로 return staffVo
             return staffList;
         }
     }
 
+    //삭제
+    @Override
+    @Transactional
+    public void delete(int i) {
+        staffMapper.delete(i);
+        staffMapper.deleteStaffSkills(i);
+    }
+    //문자열로 된 스킬을 skill_no로 바꿔주는 메서드
     private List<Integer> stringToIntSkill(List<String> skillCode) {
         List<Integer> skillCodes = new ArrayList<>();
         List<CodeSkill> codeSkills = staffMapper.getSkillBoth();//데이터베이스에서 가져온 스킬
@@ -149,14 +162,6 @@ public class StaffServiceImpl implements StaffService {
         }
         System.out.println("skillCodes : " + skillCodes.toString());
         return skillCodes;
-    }
-
-    //삭제
-    @Override
-    @Transactional
-    public void delete(int i) {
-        staffMapper.delete(i);
-        staffMapper.deleteStaffSkills(i);
     }
 
     //기존 스킬 외의 기술 체크 후 신규 저장
@@ -189,7 +194,8 @@ public class StaffServiceImpl implements StaffService {
         }
     }
 
-    public void addEssentialSkills() {
+    //필수스킬을 static array에 저장시켜주는 메서드드
+   public void addEssentialSkills() {
         if (essentialSkills.isEmpty()) {
             essentialSkills.add("JAVA");
             essentialSkills.add("JSP");

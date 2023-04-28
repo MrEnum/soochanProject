@@ -132,10 +132,10 @@
         <%--				<c:set var="Day"><fmt:formatDate value="${staff.graduateDay}" pattern="dd" /></c:set>--%>
         <td colspan="5" id="jol">
             <select style="width:10%;" class="year" id="gYear">
-                <option value="${Year }"><c:out value="${Year}"/></option>
+                <option value="${Year}"><c:out value="${Year}"/></option>
             </select>년
             <select style="width:7%;" class="month" id="gMonth">
-                <option value="${Month}"></option>
+                <option value="${Month}"><c:out value="${Month}"/></option>
                 <option value="02">02</option>
                 <option value="08">08</option>
             </select>월
@@ -332,14 +332,18 @@
 
             };
             console.log(staffRequestDto);
-            if (confirm('정말 저장 하시겠습니까?')) {
+            if (confirm(' 정말 수정하시겠습니까?')) {
                 $.ajax({
                     url: 'update',
                     type: 'post',
                     data: staffRequestDto,
                     success: function (msg) {
-                        alert("수정되었습니다.");
-                        window.close();
+                        if (msg.check == true) {
+                            alert("수정되었습니다.");
+                            close();
+                        } else {
+                            alert("수정실패");
+                        }
                     },
                     error: function () {
                         alert("에러");
@@ -357,12 +361,18 @@
                     type: "DELETE",
                     dataType: "json",
                     success: function (msg) {
-                        alert("삭제되었습니다");
-                        opener.window.location.reload();
-                        close();
+                        if (msg.check == true) {
+                            alert("삭제되었습니다.");
+                            opener.window.location.reload();
+                            close();
+                        } else {
+                            alert("삭제실패");
+                        }
                     },
                     error: function () {
-
+                    alert("삭제되었습니다.");
+                        opener.window.location.reload();
+                        close();
                     }
                 });
             }

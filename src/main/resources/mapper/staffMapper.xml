@@ -50,7 +50,7 @@
                 AND department_code = #{departmentCode}
             </if>
             <if test="schoolCode != null">
-                or school_code IN
+                AND school_code IN
                 <foreach item="item" index="index" collection="schoolCode" open="(" separator="," close=")">
                     #{item}
                 </foreach>
@@ -88,8 +88,9 @@
                 AND department_code = #{departmentCode}
             </if>
             <if test="schoolCode != null">
-                <foreach item="item" index="index" collection="schoolCode">
-                    OR school_code = #{item}
+                AND school_code IN
+                <foreach item="item" index="index" collection="schoolCode" open="(" separator=", " close=")">
+                    #{item}
                 </foreach>
             </if>
             <if test="startGraduateDay != null or endGraduateDay != null ">
@@ -139,27 +140,44 @@
             SELECT a.*
             FROM staff a
             Join staff_skill s on a.staff_no = s.staff_no
-            WHERE skill_code in
-            <foreach collection="skillCodeList" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-            GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
-            having count(distinct skill_code) = #{skillCountEss}
+            <where>
+                <if test="staffNoList != null">
+                    s.staff_no IN
+                    <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                And skill_code in
+                <foreach collection="skillCodeList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                GROUP BY a.staff_no, a.staff_gender, a.staff_name, a.jumin_no, a.school_code, a.department_code,
+                a.graduate_day
+                having count(distinct skill_code) = #{skillCountEss}
+            </where>
             <if test="skillCountNew != 0 and skillCountEss != 0">
                 union
             </if>
         </if>
-
         <if test="skillCountNew != 0">
             SELECT a.*
             FROM staff a
             Join staff_skill s on a.staff_no = s.staff_no
-            WHERE skill_code in
-            <foreach collection="newSkillCodeList" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-            GROUP BY a.staff_no, a.staff_name, a.jumin_no, a.school_code, a.department_code, a.graduate_day
-            having count(distinct skill_code) = #{skillCountNew}
+            <where>
+                <if test="staffNoList != null">
+                    s.staff_no IN
+                    <foreach item="item" index="index" collection="staffNoList" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+                And skill_code in
+                <foreach collection="newSkillCodeList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                GROUP BY a.staff_no, a.staff_gender,a.staff_name, a.jumin_no, a.school_code, a.department_code,
+                a.graduate_day
+                having count(distinct skill_code) = #{skillCountNew}
+            </where>
         </if>
     </select>
 

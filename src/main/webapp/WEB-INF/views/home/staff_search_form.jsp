@@ -17,21 +17,6 @@
       integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <!-- 사용자작성 css -->
 
-<!-- sock.js 추가 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"
-        integrity="sha512-ayb5R/nKQ3fgNrQdYynCti/n+GD0ybAhd3ACExcYvOR2J1o3HebiAe/P0oZDx5qwB+xkxuKG6Nc0AFTsPT/JDQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- stomp.js 추가 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-        integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- IE 지원용 : babel-standalone bael-polyfill -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"
-        integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"
-        integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <%--dataTable--%>
 <link rel="stylesheet" href="https://cdn.datatables.net/t/bs-3.3.6/jqc-1.12.0,dt-1.10.11/datatables.min.css"/>
 <%--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>--%>
@@ -387,11 +372,9 @@
             <button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="staffReset">초기화
             </button>
             <input type="submit" class="btn btn-secondary float-right" id="staffSearch" style="margin-right:10px;"
-                   value="전부검색">
+                   value="전체검색">
             <input type="submit" class="btn btn-secondary float-right" id="searchDetail" style="margin-right:10px;"
                    value="상세검색"
-
-
             <%--			<button type="button" class="btn btn-secondary float-right" style="margin-right:10px;" id="searchAll">전부검색</button>--%>
 
             <input type="hidden" name="tagInfo" id="tagInfo"/>
@@ -399,7 +382,6 @@
         </div>
     </div>
 </form>
-
 <br/>
 <br/>
 <br/>
@@ -532,7 +514,7 @@
 
     // 상세검색 버튼
     $("#staffSearch").click(e => {
-        console.log("전부검색 버튼 작동");
+        console.log("전체검색 버튼 작동");
         e.preventDefault();
         searchAllPage();
     });

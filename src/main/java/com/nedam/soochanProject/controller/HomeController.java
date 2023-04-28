@@ -64,12 +64,13 @@ public class HomeController {
 
     //수정 return :
     @PostMapping("/update")
-    public String update(StaffRequestDto staffRequestDto) throws ParseException {
+    public Map<String, Boolean> update(StaffRequestDto staffRequestDto) throws ParseException {
         System.out.println("타집니다. 컨트롤러 ");
 //        staffRequestDto.setStaffNo(staffNo);
         staffService.update(staffRequestDto);
-
-        return "home/staff_search_form";
+        Map<String, Boolean> map = new HashMap<String, Boolean>();
+        map.put("check", true);
+        return map;
     }
 
     //상세조회
@@ -86,7 +87,6 @@ public class HomeController {
         List<String> allSkillList = new ArrayList<>(staffMapper.getSkillList());
         for (int i = 0; i < essentialSkills.size(); i++) {
             for (int j = 0; j < allSkillList.size(); j++) {
-
                 if (allSkillList.get(j).equals(essentialSkills.get(i))) {
                     allSkillList.remove(j);
                 }
@@ -112,18 +112,21 @@ public class HomeController {
     public Map<String, Boolean> register(StaffRequestDto staffRequestDto) throws Exception {
         System.out.println("staffRequestDto : " + staffRequestDto);
         Map<String, Boolean> map = new HashMap<String, Boolean>();
+        map.put("check", true);
         //문자열로 바꿔서 Date타입으로 변환
         staffService.register(staffRequestDto);
-        map.put("check", true);
+
         return map;
     }
 
 
     @DeleteMapping("/delete/{staffNo}")
-    public String delete(@PathVariable int staffNo) {
+    public Map<String, Boolean>delete(@PathVariable int staffNo) {
         System.out.println("삭제 컨트롤러 staffNo : " + staffNo);
         staffService.delete(staffNo);
-        return "home/staff_search_form";
+        Map<String, Boolean> map = new HashMap<String, Boolean>();
+        map.put("check", true);
+        return map;
 
     }
 }

@@ -242,7 +242,7 @@
         $("#submitBtn").click(function () {
 
             var staff_name = $("#staffName").val();
-            var jumin_no = parseInt($("#jumin1").val() + $("#jumin2").val());
+            var jumin_no = $("#jumin1").val() + $("#jumin2").val();
             var department_code = $("#department").val();
             var school_code = $("input:checkbox[name=school_code]:checked").val();
             var chkarr = [];
